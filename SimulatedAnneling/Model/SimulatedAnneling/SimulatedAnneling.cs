@@ -62,10 +62,6 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// </summary>
         private ISolution bestSolution;
         /// <summary>
-        /// Mejor solución generada de un lote
-        /// </summary>
-        private ISolution bestSolutionLot;
-        /// <summary>
         /// Lotes generados durante la simulación del recocido
         /// </summary>
         private ArrayList lots;
@@ -88,7 +84,6 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
             bestSolution = null;
-            bestSolutionLot = null;
             lots = new ArrayList();
         }
         /// <summary>
