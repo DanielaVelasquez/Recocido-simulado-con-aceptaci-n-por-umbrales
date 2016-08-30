@@ -18,28 +18,51 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// la temperatura disminuyendo
         /// </summary>
         private const double COOLING_FACTOR = 0.65432;
+        
         /// <summary>
         /// Tamaño de los lotes que se van a generar
         /// </summary>
         private const int LOT_SIZE = 100;
+        
         /// <summary>
         /// Máxima cantidad de iteraciones permitidas cuando se trata
         /// de generar un lote
         /// </summary>
         private const int MAX_ITERATION_LOT = LOT_SIZE * 300;   
+        
         /// <summary>
         /// Cero virtual para el equilibrio témico
         /// </summary>
         private const double EP = 0.025;
+        
         /// <summary>
         /// Cero virtual para la temperatura
         /// </summary>
         private const double E = 0.015;
+       
         /// <summary>
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
         /// segun el problema
         /// </summary>
-        private const int INITIAL_TEMPERATURE = 150;
+        private const int INITIAL_TEMPERATURE = 8;
+        
+        /// <summary>
+        /// Cero virtual para ayudar a detener el algoritmo de
+        /// busqueda binaria, al preguntar por la diferencia
+        /// de sus temperaturas
+        /// </summary>
+        private const double ET = 0.036;
+
+        /// <summary>
+        /// Cero virtual para algoritmo de busqueda binaria
+        /// con base en el promedio de los aceptados
+        /// </summary>
+        private const double EACCEPTED = 0.0025;
+        /// <summary>
+        /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
+        /// de una temperatura y solución inicial
+        /// </summary>
+        private const int N = 150;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -167,6 +190,8 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                             bestSolution = solution;
                     }
                     else
+                        //Ya no se están produciendo nuevas soluciones, se para el 
+                        //algoritmo
                         isWorking = false;
 
                 }
@@ -193,6 +218,76 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         {
             Lot lot = getLastLot();
             return lot.isFinished();
+        }
+        private double initialTemperature(ISolution s,double temp,double p)
+        {
+            double p1 = perAceppted(s, temp);
+            double temp1, temp2;
+            if (Math.Abs(p - p1) <= EP)
+                return temp;
+            if(p1<p)
+            {
+                while(p1<p)
+                {
+                    temp = 2 * temp;
+                    p1 = perAceppted(s, temp);
+                }
+                temp1 = temp / 2;
+                temp2 = temp;
+            }
+            else
+            {
+                while(p1>p)
+                {
+                    temp = temp / 2;
+                    p1 = perAceppted(s, temp);
+                }
+                temp1 = temp;
+                temp2 = 2 * temp;
+            }
+            return binarySearch(s, temp1, temp2, p);
+        }
+        /// <summary>
+        /// Obtiene el porcentaje de soluciones aceptadas que se generaron
+        /// a partir de una solución inicial con una temperatura
+        /// </summary>
+        /// <param name="solution">solución inicial para recorrer el espacio de soluciones</param>
+        /// <param name="temperature">temperatura inicial permite conocer el porcentaje de soluciones promedio para dicha  temperatura</param>
+        /// <returns>porcentaje de soluciones aceptadas para una temperatura inicial</returns>
+        private double perAceppted(ISolution solution,double temperature)
+        {
+            //Cantidad de soluciones aceptadas
+            int accepted = 0;
+            for(int i = 0; i<N; i++)
+            {
+                ISolution neighbour = solution.getNeighbour(random);
+                if (isAccepted(neighbour, solution, temperature))
+                    accepted++;
+                solution = neighbour;
+            }
+            return accepted / N;
+        }
+        /// <summary>
+        /// Realiza busqueda binaria para encontrar una temperatura media entre 
+        /// las dos temperaturas dadas
+        /// </summary>
+        /// <param name="s">solucion inicial</param>
+        /// <param name="temp1">primera temperatura</param>
+        /// <param name="temp2">segunda temperatura</param>
+        /// <param name="accepted">porcentaje de soluciones que se van a aceptar</param>
+        /// <returns></returns>
+        private double binarySearch(ISolution s,double temp1,double temp2,double accepted)
+        {
+            double average = (temp1 + temp2) / 2;
+            if (temp2 - temp1 < ET)
+                return average;
+            double accepted1 = perAceppted(s, average);
+            if (Math.Abs(accepted - accepted1)<EACCEPTED)
+                return average;
+            if (accepted1 > accepted)
+                return binarySearch(s, temp1, average, accepted);
+            else
+                return binarySearch(s, average, temp2, accepted);
         }
     }
 }
