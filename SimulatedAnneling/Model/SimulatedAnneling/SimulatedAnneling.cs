@@ -165,18 +165,20 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <returns>último lote generado, en caso de no haber lotes retorna null</returns>
         private Lot getLastLot()
         {
+            //Obtiene indice del ultimo lote en la lista de lotes
             int lastIndex = lots.Count - 1;
             if (lastIndex>=0)
                 return (Lot)lots[lastIndex];
             return null;
         }
+        /// <summary>
+        /// Retora si el ultimo lote se generó completo o no
+        /// </summary>
+        /// <returns>verdadero si el lote se genero completo, falso en caso contrario</returns>
         private Boolean didLastLotEnd()
         {
-            //Obtiene indice del ultimo lote en la lista de lotes
-            int lastIndex = lots.Count - 1;
-            Lot lot = (Lot) lots[lastIndex];
+            Lot lot = getLastLot();
             return lot.isFinished();
-
         }
     }
 }
