@@ -9,6 +9,33 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     public class SimulatedAnneling<T> where T: ISolution
     {
         /**-------------------------------------------------------------------------------------------
+         * Constantes
+         *--------------------------------------------------------------------------------------------
+         **/
+        /// <summary>
+        /// Factor de enfriamiento del sistema, determina que tan rápido o lento
+        /// la temperatura disminuyendo
+        /// </summary>
+        private const double COOLING_FACTOR = 0.65432;
+        /// <summary>
+        /// Tamaño de los lotes que se van a generar
+        /// </summary>
+        private const int LOT_SIZE = 100;
+        /// <summary>
+        /// Máxima cantidad de iteraciones permitidas cuando se trata
+        /// de generar un lote
+        /// </summary>
+        private const int MAX_ITERATION_LOT = LOT_SIZE * 300;   
+        /// <summary>
+        /// Cero virtual para el equilibrio témico
+        /// </summary>
+        private const double EP = 0.025;
+        /// <summary>
+        /// Cero virtual para la temperatura
+        /// </summary>
+        private const double E = 0.015;
+
+        /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
          **/
@@ -25,10 +52,13 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// </summary>
         private Random random;
         /// <summary>
-        /// Factor de enfriamiento del sistema, determina que tan rápido o lento
-        /// la temperatura disminuyendo
+        /// Mejor solución encontrada del problema 
         /// </summary>
-        private float coolingFactor;
+        private ISolution bestSolution;
+        /// <summary>
+        /// Mejor solución generada de un lote
+        /// </summary>
+        private ISolution bestSolutionLot;
 
         
 
