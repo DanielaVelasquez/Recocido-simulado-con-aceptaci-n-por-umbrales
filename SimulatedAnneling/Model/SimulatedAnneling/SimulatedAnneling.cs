@@ -149,9 +149,26 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                 while(Math.Abs(p-p1)>EP)
                 {
                     float temp = calculateLot(solution);
+                    //Verificar si el último lote terminó
+                    if(didLastLotEnd())
+                    {
+                        p1 = p;
+                        p = temp;
+                    }
 
                 }
             }
+        }
+        /// <summary>
+        /// Retorna el último lote generado en caso de que exista
+        /// </summary>
+        /// <returns>último lote generado, en caso de no haber lotes retorna null</returns>
+        private Lot getLastLot()
+        {
+            int lastIndex = lots.Count - 1;
+            if (lastIndex>=0)
+                return (Lot)lots[lastIndex];
+            return null;
         }
         private Boolean didLastLotEnd()
         {
