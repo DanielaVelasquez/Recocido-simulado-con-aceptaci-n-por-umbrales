@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace SimulatedAnneling.Model.SimulatedAnneling
 {
-    public class SimulatedAnneling<T> where T: ISolution
+    public class SimulatedAnneling
     {
         /**-------------------------------------------------------------------------------------------
          * Constantes
@@ -60,11 +60,11 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Mejor solución encontrada del problema 
         /// </summary>
-        private T bestSolution;
+        private ISolution bestSolution;
         /// <summary>
         /// Mejor solución generada de un lote
         /// </summary>
-        private T bestSolutionLot;
+        private ISolution bestSolutionLot;
         /// <summary>
         /// Lotes generados durante la simulación del recocido
         /// </summary>
@@ -72,7 +72,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Administrador del problema que se desea resolver
         /// </summary>
-        private IManager<T> manager;
+        private IManager manager;
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
@@ -87,8 +87,8 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             seed = nSeed;
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
-            bestSolution = default(T);
-            bestSolutionLot = default(T);
+            bestSolution = null;
+            bestSolutionLot = null;
             lots = new ArrayList();
         }
         
@@ -103,7 +103,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
 
             while(neighbours_accepted < LOT_SIZE && iterations < MAX_ITERATION_LOT)
             {
-                T neighbour = solution.getNeighbour(random);
+                ISolution neighbour = solution.getNeighbour(random);
                 if (isAccepted(neighbour,solution,temperature)
                 {
 
@@ -122,7 +122,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// verdadero si la funcion de costo del vecino es menor o igual a la función 
         /// de costo de la solución actual más la temperatura, falso en caso contrario
         /// </returns>
-        private Boolean isAccepted(T neighbour,T solution, int temp)
+        private Boolean isAccepted(ISolution neighbour,ISolution solution, int temp)
         {
             return neighbour.calculateCostFunction() <= solution.calculateCostFunction() + temp;
         }

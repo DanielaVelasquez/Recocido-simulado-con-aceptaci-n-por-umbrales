@@ -10,7 +10,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     /// <summary>
     /// Representa un lote producido al generar el recocido simulado
     /// </summary>
-    public class Lot<T> where T : ISolution
+    public class Lot
     {
         /**-------------------------------------------------------------------------------------------
          * Atributos
@@ -48,7 +48,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Adiciona una nueva solución al lote
         /// </summary>
         /// <param name="solution">Nueva solución del lote</param>
-        public void addSolution(T solution)
+        public void addSolution(ISolution solution)
         {
             solutions.Add(solution);
         }
