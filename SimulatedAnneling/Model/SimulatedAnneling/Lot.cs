@@ -81,5 +81,13 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         {
             return finished;
         }
+        /// <summary>
+        /// Obtiene la mejor solución del lote
+        /// </summary>
+        /// <returns>Mejor solución del lote</returns>
+        public ISolution getBest()
+        {
+            return best;
+        }
     }
 }
