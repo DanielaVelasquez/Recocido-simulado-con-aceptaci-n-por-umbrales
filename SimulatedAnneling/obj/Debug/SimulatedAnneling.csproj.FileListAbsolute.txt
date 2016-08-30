@@ -1,0 +1,1 @@
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\SimulatedAnneling.exe.config
