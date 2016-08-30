@@ -63,6 +63,11 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// de una temperatura y solución inicial
         /// </summary>
         private const int N = 150;
+        /// <summary>
+        /// Porcentaje de soluciones aceptadas que se desea tener para calcular
+        /// la solución inicial
+        /// </summary>
+        private const double ACCEPTED_SOLUTIONS = 0.9356;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -107,6 +112,21 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             random = new Random(seed);
             bestSolution = null;
             lots = new ArrayList();
+        }
+        /// <summary>
+        /// Realiza la simulación del recocido y retorna la mejor solución encontrada
+        /// </summary>
+        /// <returns>Mejor solución encontrada</returns>
+        public ISolution simulate()
+        {
+            //Genera una solución inicial
+            ISolution initialSolution = manager.getRamdomSolution(random);
+            //Calcula la temperatura inicial del problema 
+            temperature = initialTemperature(initialSolution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
+            bestSolution = initialSolution;
+            simulatedAnneling(initialSolution);
+            return bestSolution;
+
         }
         /// <summary>
         /// Calcula un lote de soluciones dentro del umbral determinado por la temperatura
@@ -219,52 +239,123 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             Lot lot = getLastLot();
             return lot.isFinished();
         }
-        private double initialTemperature(ISolution s,double temp,double p)
+        /// <summary>
+        /// Obtiene una temperatura que aumenta la probabilidad
+        /// de desplazarse más rapida y efectivamente por el 
+        /// conjunto de soluciones, evitando de igual forma
+        /// que sea un enfriamiento demasiado lentp
+        /// </summary>
+        /// <param name="solution">Solución inicial (aleatoria)</param>
+        /// <param name="temp">temperatura inicial arbitraria </param>
+        /// <param name="p">
+        /// Porcentaje de soluciones que se desea sean aceptadas 
+        /// por la temperatura inicial que se quiere encontrar. Aprox
+        /// .85<= p <= .95
+        /// </param>
+        /// <returns></returns>
+        private double initialTemperature(ISolution solution,double temp,double p)
         {
+            ISolution s = (ISolution) solution.Clone();
+            /**
+             * Se calcula el porcentaje de soluciones aceptadas
+             * a partir de la temperatura arbitraria que se tomo
+            */
             double p1 = perAceppted(s, temp);
             double temp1, temp2;
+            /**
+             * Si la diferencia entre el porcentaje de soluciones
+             * aceptadas a partir de los datos iniciales se acerca
+             * bastante al porcentaje de soluciones que se quiere
+             * acepte la temperatura inicial es decir p1 sea casi p 
+             * se dice que la temperatura dada es un temperatura
+             * adecuada para iniciar el algoritmo
+             **/
             if (Math.Abs(p - p1) <= EP)
                 return temp;
+            /**
+             * Si el porcentaje de soluciones aceptadas (p1) es menor
+             * al porcentaje p que se desea tener, se incrementa la 
+             * temperatura al doble
+             **/ 
             if(p1<p)
             {
+                /**
+                 * Mientras el porcentaje de soluciones aceptas p1 siga
+                 * siendo menor que el porcentaje que se desea se aumenta
+                 * la temperatura y se evalua hasta que el porcentaje de 
+                 * aceptados se mayor que el que se desea
+                 **/
                 while(p1<p)
                 {
                     temp = 2 * temp;
                     p1 = perAceppted(s, temp);
                 }
+                /**
+                 * --------|------------|-----------
+                 *       temp/2        temp
+                 **/
                 temp1 = temp / 2;
                 temp2 = temp;
             }
             else
             {
+                /**
+                 * Por el contrario si el numero de aceptados excede
+                 * el porcentaje de aceptados que se desea, la temperatura 
+                 * se disminuye y se evalua hasta que el porcentaje de aceptados
+                 * sea el apropiado
+                 **/ 
                 while(p1>p)
                 {
                     temp = temp / 2;
                     p1 = perAceppted(s, temp);
                 }
+                /**
+                 * --------|------------|-----------
+                 *       temp         2 * temp
+                 **/
                 temp1 = temp;
                 temp2 = 2 * temp;
             }
+            /**
+             * Realiza una busqueda binaria entre temp1 y temp2
+             * --------|----------|----------|-----------
+             *       temp1        ?        temp2 
+             * con el objetivo de encontrar un valor intermedio 
+             * entre estos que se acerque más al porcentaje de 
+             * aceptados que se quiere.
+             * temp ha sido cambiado entre 2 incrementandolo y 
+             * decrementandolo por eso se hacen las operaciones
+             * respectivas para obtener temp1 o temp2
+             **/
             return binarySearch(s, temp1, temp2, p);
         }
         /// <summary>
         /// Obtiene el porcentaje de soluciones aceptadas que se generaron
         /// a partir de una solución inicial con una temperatura
         /// </summary>
-        /// <param name="solution">solución inicial para recorrer el espacio de soluciones</param>
+        /// <param name="s">solución inicial para recorrer el espacio de soluciones</param>
         /// <param name="temperature">temperatura inicial permite conocer el porcentaje de soluciones promedio para dicha  temperatura</param>
         /// <returns>porcentaje de soluciones aceptadas para una temperatura inicial</returns>
-        private double perAceppted(ISolution solution,double temperature)
+        private double perAceppted(ISolution s,double temperature)
         {
+            ISolution solution = (ISolution)s.Clone();
             //Cantidad de soluciones aceptadas
             int accepted = 0;
+            //Se generan N vecinos a partir de una solución
             for(int i = 0; i<N; i++)
             {
                 ISolution neighbour = solution.getNeighbour(random);
+                //Si el vecino es aceptado se incrementa la cantidad
+                //de soluciones aceptadas
                 if (isAccepted(neighbour, solution, temperature))
                     accepted++;
+                //Siempre se intercambia la solución por el vecino para
+                //para explorar más en el conjunto de soluciones
                 solution = neighbour;
             }
+            //Retorna cantidad de soluciones aceptadas sobre el numero
+            //de soluciones que se generon en total
             return accepted / N;
         }
         /// <summary>
@@ -278,12 +369,37 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <returns></returns>
         private double binarySearch(ISolution s,double temp1,double temp2,double accepted)
         {
+            /**
+             * Calcula el valor medio entre las dos temperaturas
+             * --------|----------|----------|-------
+             *        temp1     average     tem2
+             **/
             double average = (temp1 + temp2) / 2;
+            
+            //Si la diferencia entre las temperaturas es casi 0, se retorna el promedio de ellas
             if (temp2 - temp1 < ET)
                 return average;
+            /**
+             * En otro caso:
+             * calcula el porcentaje de soluciones aceptadas con el valor medio entre las
+             * temperaturas dadas
+             **/ 
             double accepted1 = perAceppted(s, average);
+            /**
+             * Si la diferencia entre el porcentaje de aceptados con la temperatura media y el porcentaje de aceptados
+             * que se desea es muy pequeña, se retorna el promedio entre las temperaturas dadas
+             **/
             if (Math.Abs(accepted - accepted1)<EACCEPTED)
                 return average;
+            /**
+             * Si el porcentaje de aceptados con la temperatura media supera el porcentaje de aceptados deseados
+             * significa que se debe disminuir la temperatura y se busca entre temp1 y average para encontrar
+             * una temperaura promedio entre ellos que cumpla con los requisitos, el caso contrario sinifica
+             * que se debe incrementar la temperatura y se realiza una busqueda entre la media y la temperatura 2
+             * --------|-----|-----|------|----|-------
+             *        temp1  ?   average  ?  tem2
+             *         
+             **/
             if (accepted1 > accepted)
                 return binarySearch(s, temp1, average, accepted);
             else

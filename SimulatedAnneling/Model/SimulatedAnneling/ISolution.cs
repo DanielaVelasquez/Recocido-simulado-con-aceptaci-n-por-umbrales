@@ -9,7 +9,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     /// <summary>
     /// Modela una solución asociada a un problema
     /// </summary>
-    public interface ISolution
+    public interface ISolution : ICloneable
     {
         ///<summary>
         ///Calcula la función de costo de una posible solución
