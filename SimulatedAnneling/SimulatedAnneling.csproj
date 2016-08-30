@@ -50,6 +50,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\SimulatedAnneling\IManager.cs" />
+    <Compile Include="Model\SimulatedAnneling\ISolution.cs" />
+    <Compile Include="Model\SimulatedAnneling\SimulatedAnneling.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

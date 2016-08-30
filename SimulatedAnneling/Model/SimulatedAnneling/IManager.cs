@@ -11,7 +11,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     /// información general asociada al problema a resolver por ejemplo
     /// generar una solución aletoria inicial
     /// </summary>
-    public interface IManager
+    public interface IManager<T> where T : ISolution
     {
         /// <summary>
         /// Crea una solución aletoria del problema
