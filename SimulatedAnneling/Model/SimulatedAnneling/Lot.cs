@@ -35,7 +35,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
          *--------------------------------------------------------------------------------------------
          **/
         /// <summary>
-        /// Constructo de un lote
+        /// Constructor de un lote
         /// </summary>
         /// <param name="nTemperature">Temperatura a la cual se está generando el lote</param>
         public Lot(int nTemperature)
@@ -51,6 +51,14 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         public void addSolution(T solution)
         {
             solutions.Add(solution);
+        }
+        /// <summary>
+        /// Cambia el valor de verdad que determina si el lote termino o no
+        /// </summary>
+        /// <param name="nFinished">Nuevo valor determina si el lote termino o no</param>
+        public void setIsFinished(Boolean nFinished)
+        {
+            finished = nFinished;
         }
     }
 }
