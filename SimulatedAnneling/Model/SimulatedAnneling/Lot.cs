@@ -29,6 +29,10 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// el máximo número de iteraciones
         /// </summary>
         private Boolean finished;
+        /// <summary>
+        /// Mejor solución del lote
+        /// </summary>
+        private ISolution best;
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -43,6 +47,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             temperature = nTemperature;
             finished = false;
             solutions = new ArrayList();
+            best = null;
         }
         /// <summary>
         /// Adiciona una nueva solución al lote
@@ -59,6 +64,14 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         public void setIsFinished(Boolean nFinished)
         {
             finished = nFinished;
+        }
+        /// <summary>
+        /// Cambia la mejor solución del lote
+        /// </summary>
+        /// <param name="nBest"></param>
+        public void setBest(ISolution nBest)
+        {
+            best = nBest;
         }
     }
 }

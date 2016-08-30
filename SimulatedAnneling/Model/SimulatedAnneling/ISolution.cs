@@ -18,7 +18,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         ///<returns>
         ///Función de costo asociada a la solución
         ///</returns>
-        double calculateCostFunction();
+        float calculateCostFunction();
 
         ///<summary>
         ///Obtiene un vecino a la solución actual a partir de un elemento random

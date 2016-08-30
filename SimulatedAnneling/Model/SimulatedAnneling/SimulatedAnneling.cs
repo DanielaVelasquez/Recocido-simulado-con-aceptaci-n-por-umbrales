@@ -91,25 +91,45 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             bestSolutionLot = null;
             lots = new ArrayList();
         }
-        
-        private float calculateLot(T solution)
+        /// <summary>
+        /// Calcula un lote de soluciones dentro del umbral determinado por la temperatura
+        /// </summary>
+        /// <param name="solution">solución a partir de la cual se va a generar el lote</param>
+        /// <returns></returns>
+        private float calculateLot(ISolution solution)
         {
             //Cantidad de vecinos aceptados
             int neighbours_accepted = 0;
             //Suma costos de función de todos los vecinos aceptados
-            float costs_functios = 0;
+            float costs_functions = 0;
             //Cantidad de iteraciones
             int iterations = 0;
-
+            //Creación de un lote
+            Lot lot = new Lot(temperature);
+            //Adiciona primera solucion
+            lot.addSolution(solution);
+            //Se asume como mejor solución a la solución inicial dada
+            lot.setBest(solution);
             while(neighbours_accepted < LOT_SIZE && iterations < MAX_ITERATION_LOT)
             {
                 ISolution neighbour = solution.getNeighbour(random);
-                if (isAccepted(neighbour,solution,temperature)
+                if (isAccepted(neighbour,solution,temperature))
                 {
-
+                    solution = neighbour;
+                    neighbours_accepted = neighbours_accepted + 1;
+                    costs_functions = costs_functions + neighbour.calculateCostFunction();
+                    //Adiciona el vecino aceptado
+                    lot.addSolution(neighbour);   
                 }
-
+                iterations = iterations + 1;
             }
+            //Determina si el lote acabó 
+            lot.setIsFinished(neighbours_accepted <= LOT_SIZE);
+            //Adiciona el lote al conjunto de lotes del problema
+            lots.Add(lot);
+            //Se guarda la mejor solución del lote
+            lot.setBest(solution);
+            return costs_functions / LOT_SIZE;
         }
         /// <summary>
         /// Determina si un vecino es aceptado a partir de la temperatura y la solución 
