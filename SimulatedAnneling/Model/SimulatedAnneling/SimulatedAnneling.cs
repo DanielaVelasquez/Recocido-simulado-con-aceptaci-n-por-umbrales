@@ -39,8 +39,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
         /// segun el problema
         /// </summary>
-        public const int INITIAL_TEMPERATURE = 150;
-
+        private const int INITIAL_TEMPERATURE = 150;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -90,7 +89,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Calcula un lote de soluciones dentro del umbral determinado por la temperatura
         /// </summary>
         /// <param name="solution">solución a partir de la cual se va a generar el lote</param>
-        /// <returns></returns>
+        /// <returns>Promedio de las soluciones aceptadas</returns>
         private float calculateLot(ISolution solution)
         {
             //Cantidad de vecinos aceptados
@@ -140,6 +139,27 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         private Boolean isAccepted(ISolution neighbour,ISolution solution, int temp)
         {
             return neighbour.calculateCostFunction() <= solution.calculateCostFunction() + temp;
+        }
+        private void simulatedAnneling(ISolution solution)
+        {
+            float p = float.MaxValue;
+            while(temperature>E)
+            {
+                float p1 = 0;
+                while(Math.Abs(p-p1)>EP)
+                {
+                    float temp = calculateLot(solution);
+
+                }
+            }
+        }
+        private Boolean didLastLotEnd()
+        {
+            //Obtiene indice del ultimo lote en la lista de lotes
+            int lastIndex = lots.Count - 1;
+            Lot lot = (Lot) lots[lastIndex];
+            return lot.isFinished();
+
         }
     }
 }

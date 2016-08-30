@@ -73,5 +73,13 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         {
             best = nBest;
         }
+        /// <summary>
+        /// Determina si el lote terminó
+        /// </summary>
+        /// <returns>verdadero si el lote termino, falso en caso contrario</returns>
+        public Boolean isFinished()
+        {
+            return finished;
+        }
     }
 }
