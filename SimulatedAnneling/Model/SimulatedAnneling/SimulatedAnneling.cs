@@ -47,7 +47,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Temperatura permite explorar soluciones fuera de un mínimo local
         /// </summary>
-        private int temperature;
+        private double temperature;
         /// <summary>
         /// Semilla utilizada para aletoriedad de las soluciones
         /// </summary>
@@ -90,7 +90,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// </summary>
         /// <param name="solution">solución a partir de la cual se va a generar el lote</param>
         /// <returns>Promedio de las soluciones aceptadas</returns>
-        private float calculateLot(ISolution solution)
+        private double calculateLot(ISolution solution)
         {
             //Cantidad de vecinos aceptados
             int neighbours_accepted = 0;
@@ -136,27 +136,37 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// verdadero si la funcion de costo del vecino es menor o igual a la función 
         /// de costo de la solución actual más la temperatura, falso en caso contrario
         /// </returns>
-        private Boolean isAccepted(ISolution neighbour,ISolution solution, int temp)
+        private Boolean isAccepted(ISolution neighbour,ISolution solution, double temp)
         {
             return neighbour.calculateCostFunction() <= solution.calculateCostFunction() + temp;
         }
+        /// <summary>
+        /// Realiza el recocido simulado a partir de una solución inicial, hasta encontrar
+        /// el equilibrio térmico
+        /// </summary>
+        /// <param name="solution">solución inicial para la simulación</param>
         private void simulatedAnneling(ISolution solution)
         {
-            float p = float.MaxValue;
+            double p = double.MaxValue;
             while(temperature>E)
             {
-                float p1 = 0;
+                double p1 = 0;
                 while(Math.Abs(p-p1)>EP)
                 {
-                    float temp = calculateLot(solution);
-                    //Verificar si el último lote terminó
+                    double temp = calculateLot(solution);
+                    //Si el último lote terminó
                     if(didLastLotEnd())
                     {
                         p1 = p;
                         p = temp;
+                        solution = getLastLot().getBest();
+                        //Si es la mejor solucion se guarda
+                        if(isAccepted(solution,bestSolution,temperature))
+                            bestSolution = solution;
                     }
 
                 }
+                temperature = COOLING_FACTOR*temperature;
             }
         }
         /// <summary>

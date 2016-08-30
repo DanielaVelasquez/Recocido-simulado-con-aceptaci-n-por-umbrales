@@ -23,7 +23,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Temperatura en la cual fue generado el lote
         /// </summary>
-        private int temperature;
+        private double temperature;
         /// <summary>
         /// Determina si el lote se generó completo o se detuvo al alcanzar
         /// el máximo número de iteraciones
@@ -42,7 +42,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Constructor de un lote
         /// </summary>
         /// <param name="nTemperature">Temperatura a la cual se está generando el lote</param>
-        public Lot(int nTemperature)
+        public Lot(double nTemperature)
         {
             temperature = nTemperature;
             finished = false;
