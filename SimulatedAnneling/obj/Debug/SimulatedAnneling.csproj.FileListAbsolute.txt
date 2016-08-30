@@ -1,1 +1,8 @@
 C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\SimulatedAnneling.exe.config
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\SimulatedAnneling.exe
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\SimulatedAnneling.pdb
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.csprojResolveAssemblyReference.cache
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.Properties.Resources.resources
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.csproj.GenerateResource.Cache
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.exe
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.pdb
