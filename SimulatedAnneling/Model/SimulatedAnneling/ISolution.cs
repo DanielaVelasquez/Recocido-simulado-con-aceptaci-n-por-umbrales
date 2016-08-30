@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace SimulatedAnneling.Model.SimulatedAnneling
 {
+    /// <summary>
+    /// Modela una solución asociada a un problema
+    /// </summary>
     public interface ISolution
     {
         ///<summary>
         ///Calcula la función de costo de una posible solución
-        /// @return valor del costo de función
-        /// </summary>
+        ///@return valor del costo de función
+        ///</summary>
         ///<returns>
         ///Función de costo asociada a la solución
         ///</returns>
