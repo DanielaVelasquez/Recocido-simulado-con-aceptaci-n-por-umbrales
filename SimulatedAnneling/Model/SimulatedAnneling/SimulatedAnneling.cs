@@ -148,22 +148,26 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         private void simulatedAnneling(ISolution solution)
         {
             double p = double.MaxValue;
-            while(temperature>E)
+            //Determina si aún se están generando soluciones en un lote
+            Boolean isWorking = true;
+            while(temperature>E && isWorking)
             {
                 double p1 = 0;
                 while(Math.Abs(p-p1)>EP)
                 {
                     double temp = calculateLot(solution);
                     //Si el último lote terminó
-                    if(didLastLotEnd())
+                    if (didLastLotEnd())
                     {
                         p1 = p;
                         p = temp;
                         solution = getLastLot().getBest();
                         //Si es la mejor solucion se guarda
-                        if(isAccepted(solution,bestSolution,temperature))
+                        if (isAccepted(solution, bestSolution, temperature))
                             bestSolution = solution;
                     }
+                    else
+                        isWorking = false;
 
                 }
                 temperature = COOLING_FACTOR*temperature;
