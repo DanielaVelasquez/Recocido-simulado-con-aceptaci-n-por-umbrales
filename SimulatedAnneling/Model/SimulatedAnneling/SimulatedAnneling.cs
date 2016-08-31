@@ -123,6 +123,8 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             ISolution initialSolution = manager.getRamdomSolution(random);
             //Calcula la temperatura inicial del problema 
             temperature = initialTemperature(initialSolution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
+            //Se inicia de nuevo el random
+            random = new Random(seed);
             bestSolution = initialSolution;
             simulatedAnneling(initialSolution);
             return bestSolution;
