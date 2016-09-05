@@ -25,7 +25,10 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// Nombre de la ciudad
         /// </summary>
         private String name;
-
+        /// <summary>
+        /// Nombre País al que pertenece la ciudad
+        /// </summary>
+        private String country;
         /// <summary>
         /// Latitud ciudad
         /// </summary>
@@ -41,16 +44,11 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         *--------------------------------------------------------------------------------------------
         **/
 
-        ///<summary>
-        ///Crea ciudad información correspondiente
-        ///</summary>
-        ///<param name="nLatitude">latitud a la cual esta ubicada la ciudad</param>
-        ///<param name="nLongitude">longitud a la cual esta ubicada la ciudad</param>
-        ///<param name="nName">nombre de la ciudad</param>
-        public City(int nId,String nName, double nLatitude, double nLongitude)
+        public City(int nId,String nName,String nCountry, double nLatitude, double nLongitude)
         {
             id = nId;
             name = nName;
+            country = nCountry;
             latitude = nLatitude;
             longitude = nLongitude;
         }
