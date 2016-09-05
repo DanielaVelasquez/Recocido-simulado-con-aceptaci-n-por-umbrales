@@ -14,7 +14,7 @@ namespace SimulatedAnneling.ObserverPattern
         /// <summary>
         /// Actualiza el objeto
         /// </summary>
-        /// <param name="comando"></param>
+        /// <param name="command">especifica una orden sobre quien recibio la actualizacion</param>
         void update(String command);
     }
 }

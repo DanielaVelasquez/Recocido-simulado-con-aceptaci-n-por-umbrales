@@ -10,7 +10,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     /// <summary>
     /// Modela recocido simulado a partir de un problema
     /// </summary>
-    public class SimulatedAnneling
+    public class SimulatedAnneling : IObservable
     {
         /**-------------------------------------------------------------------------------------------
          * Constantes
