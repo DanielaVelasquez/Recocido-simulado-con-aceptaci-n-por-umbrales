@@ -16,6 +16,11 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
          * Atributos
          *--------------------------------------------------------------------------------------------
          **/
+        
+        ///<summary>
+        ///Número único que representa la ciudad
+        ///</summary>
+        private int id;
         /// <summary>
         /// Nombre de la ciudad
         /// </summary>
@@ -42,8 +47,9 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         ///<param name="nLatitude">latitud a la cual esta ubicada la ciudad</param>
         ///<param name="nLongitude">longitud a la cual esta ubicada la ciudad</param>
         ///<param name="nName">nombre de la ciudad</param>
-        public City(String nName, double nLatitude, double nLongitude)
+        public City(int nId,String nName, double nLatitude, double nLongitude)
         {
+            id = nId;
             name = nName;
             latitude = nLatitude;
             longitude = nLongitude;

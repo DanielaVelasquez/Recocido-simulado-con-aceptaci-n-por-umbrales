@@ -54,6 +54,7 @@
     <Compile Include="Model\SimulatedAnneling\ISolution.cs" />
     <Compile Include="Model\SimulatedAnneling\Lot.cs" />
     <Compile Include="Model\SimulatedAnneling\SimulatedAnneling.cs" />
+    <Compile Include="Model\TravelerSalesmanProblem\City.cs" />
     <Compile Include="Model\TravelerSalesmanProblem\Tour.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
