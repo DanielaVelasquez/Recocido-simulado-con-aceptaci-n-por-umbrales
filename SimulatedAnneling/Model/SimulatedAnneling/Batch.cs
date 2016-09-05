@@ -10,7 +10,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
     /// <summary>
     /// Representa un lote producido al generar el recocido simulado
     /// </summary>
-    public class Lot
+    public class Batch
     {
         /**-------------------------------------------------------------------------------------------
          * Atributos
@@ -42,7 +42,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Constructor de un lote
         /// </summary>
         /// <param name="nTemperature">Temperatura a la cual se está generando el lote</param>
-        public Lot(double nTemperature)
+        public Batch(double nTemperature)
         {
             temperature = nTemperature;
             finished = false;

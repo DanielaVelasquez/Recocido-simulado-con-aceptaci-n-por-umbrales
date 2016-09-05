@@ -26,13 +26,13 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Tamaño de los lotes que se van a generar
         /// </summary>
-        private const int LOT_SIZE = 100;
+        private const int BATCH_SIZE = 100;
         
         /// <summary>
         /// Máxima cantidad de iteraciones permitidas cuando se trata
         /// de generar un lote
         /// </summary>
-        private const int MAX_ITERATION_LOT = LOT_SIZE * 300;   
+        private const int MAX_ITERATION_BATCH = BATCH_SIZE * 300;   
         
         /// <summary>
         /// Cero virtual para el equilibrio témico
@@ -95,7 +95,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Lotes generados durante la simulación del recocido
         /// </summary>
-        private ArrayList lots;
+        private ArrayList batchs;
         /// <summary>
         /// Administrador del problema que se desea resolver
         /// </summary>
@@ -115,7 +115,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
             bestSolution = null;
-            lots = new ArrayList();
+            batchs = new ArrayList();
         }
         /// <summary>
         /// Realiza la simulación del recocido y retorna la mejor solución encontrada
@@ -139,7 +139,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// </summary>
         /// <param name="solution">solución a partir de la cual se va a generar el lote</param>
         /// <returns>Promedio de las soluciones aceptadas</returns>
-        private double calculateLot(ISolution solution)
+        private double calculateBatch(ISolution solution)
         {
             //Cantidad de vecinos aceptados
             int neighbours_accepted = 0;
@@ -148,12 +148,12 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             //Cantidad de iteraciones
             int iterations = 0;
             //Creación de un lote
-            Lot lot = new Lot(temperature);
+            Batch batch = new Batch(temperature);
             //Adiciona primera solucion
-            lot.addSolution(solution);
+            batch.addSolution(solution);
             //Se asume como mejor solución a la solución inicial dada
-            lot.setBest(solution);
-            while(neighbours_accepted < LOT_SIZE && iterations < MAX_ITERATION_LOT)
+            batch.setBest(solution);
+            while(neighbours_accepted < BATCH_SIZE && iterations < MAX_ITERATION_BATCH)
             {
                 ISolution neighbour = solution.getNeighbour(random);
                 if (isAccepted(neighbour,solution,temperature))
@@ -162,17 +162,17 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                     neighbours_accepted = neighbours_accepted + 1;
                     costs_functions = costs_functions + neighbour.calculateCostFunction();
                     //Adiciona el vecino aceptado
-                    lot.addSolution(neighbour);   
+                    batch.addSolution(neighbour);   
                 }
                 iterations = iterations + 1;
             }
             //Determina si el lote acabó 
-            lot.setIsFinished(neighbours_accepted <= LOT_SIZE);
+            batch.setIsFinished(neighbours_accepted <= BATCH_SIZE);
             //Adiciona el lote al conjunto de lotes del problema
-            lots.Add(lot);
+            batchs.Add(batch);
             //Se guarda la mejor solución del lote
-            lot.setBest(solution);
-            return costs_functions / LOT_SIZE;
+            batch.setBest(solution);
+            return costs_functions / BATCH_SIZE;
         }
         /// <summary>
         /// Determina si un vecino es aceptado a partir de la temperatura y la solución 
@@ -204,13 +204,13 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                 double p1 = 0;
                 while(Math.Abs(p-p1)>EP)
                 {
-                    double temp = calculateLot(solution);
+                    double temp = calculateBatch(solution);
                     //Si el último lote terminó
-                    if (didLastLotEnd())
+                    if (didLastBatchEnd())
                     {
                         p1 = p;
                         p = temp;
-                        solution = getLastLot().getBest();
+                        solution = getLastBatch().getBest();
                         //Si es la mejor solucion se guarda
                         if (isAccepted(solution, bestSolution, temperature))
                             bestSolution = solution;
@@ -228,22 +228,22 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Retorna el último lote generado en caso de que exista
         /// </summary>
         /// <returns>último lote generado, en caso de no haber lotes retorna null</returns>
-        private Lot getLastLot()
+        private Batch getLastBatch()
         {
             //Obtiene indice del ultimo lote en la lista de lotes
-            int lastIndex = lots.Count - 1;
+            int lastIndex = batchs.Count - 1;
             if (lastIndex>=0)
-                return (Lot)lots[lastIndex];
+                return (Batch)batchs[lastIndex];
             return null;
         }
         /// <summary>
         /// Retora si el ultimo lote se generó completo o no
         /// </summary>
         /// <returns>verdadero si el lote se genero completo, falso en caso contrario</returns>
-        private Boolean didLastLotEnd()
+        private Boolean didLastBatchEnd()
         {
-            Lot lot = getLastLot();
-            return lot.isFinished();
+            Batch batch = getLastBatch();
+            return batch.isFinished();
         }
         /// <summary>
         /// Obtiene una temperatura que aumenta la probabilidad
