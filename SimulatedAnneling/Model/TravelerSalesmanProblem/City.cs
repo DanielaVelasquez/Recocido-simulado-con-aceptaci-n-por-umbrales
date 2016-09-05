@@ -30,6 +30,10 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// </summary>
         private String country;
         /// <summary>
+        /// Cantidad de habitantes de la ciudad
+        /// </summary>
+        private int population;
+        /// <summary>
         /// Latitud ciudad
         /// </summary>
         private double latitude;
@@ -44,11 +48,12 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         *--------------------------------------------------------------------------------------------
         **/
 
-        public City(int nId,String nName,String nCountry, double nLatitude, double nLongitude)
+        public City(int nId,String nName,String nCountry, int nPopulation,double nLatitude, double nLongitude)
         {
             id = nId;
             name = nName;
             country = nCountry;
+            population = nPopulation;
             latitude = nLatitude;
             longitude = nLongitude;
         }
