@@ -54,7 +54,9 @@ namespace SimulatedAnneling.DAO
             MySqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                City c = 
+                City c = new City(int.Parse(reader[0].ToString()),reader[1].ToString(),reader[2].ToString(),int.Parse(reader[3].ToString()),
+                                  double.Parse(reader[4].ToString()),double.Parse(reader[5].ToString()));
+                cities.Add(c);
             }
             return cities;
         }
