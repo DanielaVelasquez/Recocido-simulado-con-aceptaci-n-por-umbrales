@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using SimulatedAnneling.ObserverPattern;
 
 namespace SimulatedAnneling.Model.SimulatedAnneling
 {
     /// <summary>
     /// Modela recocido simulado a partir de un problema
     /// </summary>
-    public class SimulatedAnneling : IObservable
+    public class SimulatedAnneling : Observable
     {
         /**-------------------------------------------------------------------------------------------
          * Constantes
@@ -220,7 +221,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                         isWorking = false;
 
                 }
-                temperature = COOLING_FACTOR*temperature;
+                updateTemperature();
             }
         }
         /// <summary>
@@ -409,6 +410,22 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                 return binarySearch(s, temp1, average, accepted);
             else
                 return binarySearch(s, average, temp2, accepted);
+        }
+        /// <summary>
+        /// Cambia el valor de la temperatura según el factor de enfriamiento
+        /// </summary>
+        public void updateTemperature()
+        {
+            temperature = COOLING_FACTOR * temperature;
+            this.notify(null);
+        }
+        /// <summary>
+        /// Regresa la temperatura actual del recocido simulado
+        /// </summary>
+        /// <returns>Temperatura actual</returns>
+        public double getTemperature()
+        {
+            return temperature;
         }
     }
 }

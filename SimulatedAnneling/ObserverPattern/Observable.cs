@@ -57,5 +57,5 @@ namespace SimulatedAnneling.ObserverPattern
                 v.update(command);
         }
     }
-    }
+    
 }
