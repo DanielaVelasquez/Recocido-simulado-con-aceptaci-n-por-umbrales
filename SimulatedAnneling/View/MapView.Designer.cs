@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(765, 461);
             this.Name = "MapView";
             this.Text = "MapView";
+            this.Load += new System.EventHandler(this.MapView_Load);
             this.ResumeLayout(false);
 
         }
