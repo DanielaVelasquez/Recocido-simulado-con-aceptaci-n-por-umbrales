@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 using SimulatedAnneling.Model.SimulatedAnneling;
+using SimulatedAnneling.DAO;
+using SimulatedAnneling.Model.TravelerSalesmanProblem;
 
 namespace SimulatedAnneling.Model.TravelerSalesmanProblem
 {
@@ -13,6 +16,33 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
     /// </summary>
     public class TourManager:IManager
     {
+        /**-------------------------------------------------------------------------------------------
+         * Atributos
+         *--------------------------------------------------------------------------------------------
+         **/
+        ///<summary>
+        ///Objeto permite acceder a las ciudades registradas y sus respectivas conexiones
+        ///</summary>
+        private DAOCity cityDAO;
+        /// <summary>
+        /// Objeto establece conexión con una base de datos sql
+        /// </summary>
+        private SQLConnection sqlConnection;
+        /// <summary>
+        /// Conjunto de ciudades del problema
+        /// </summary>
+        private ArrayList cities;
+
+        /**-------------------------------------------------------------------------------------------
+         * Métodos
+         *--------------------------------------------------------------------------------------------
+         **/
+        public TourManager(String server, String userId, String password, String database)
+        {
+            sqlConnection = new SQLConnection(server, userId, password, database);
+            cityDAO = new DAOCity(sqlConnection);
+            cities = cityDAO.getCities();
+        }
 
     }
 }
