@@ -83,10 +83,14 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             if (numberCitiesSimulation == CITIES_SIMULATION_NULL)
                 throw new Exception("You need to set how many cities are going to be use in the simulation");
-            else if (citiesSimulation == null || citiesSimulation.Count == 0)
+            else 
             {
+                
                 //Ciudades parte de la solución
                 ArrayList c = new ArrayList();
+                //Si hay ciudades en la simulación se adicionan como parte de la solución
+                if (citiesSimulation == null || citiesSimulation.Count == 0)
+                    c = (ArrayList) citiesSimulation.Clone();
                 //Ciudades que no han sido agregadas a la lista de ciudades solución
                 ArrayList copy = (ArrayList) cities.Clone();
 
@@ -97,7 +101,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 c.Add(city);
 
                 //Escoger n ciudades forma aleatoria
-                for(int i=1; i < numberCitiesSimulation; i++)
+                while(c.Count != numberCitiesSimulation)
                 {
                     //Obtiene la última ciudad agregada
                     City last = (City) c[c.Count - 1];
@@ -136,8 +140,6 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 }
                 return new Tour(c);
             }
-            else
-                return getRandomSolutionUsingCities(random);
 
         }
         /// <summary>
@@ -179,9 +181,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             }
             return null;
         }
-        private ISolution getRandomSolutionUsingCities(Random random)
+        /// <summary>
+        /// Asigna ciudades incluidas en la simulación
+        /// </summary>
+        /// <param name="c">ciudades incluidas en la simulación</param>
+        public void setCitiesSimulation(ArrayList c)
         {
-
+            citiesSimulation = c;
         }
          
 
