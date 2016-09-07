@@ -37,18 +37,21 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// Latitud ciudad
         /// </summary>
         private double latitude;
-
         /// <summary>
         /// Longitud ciudad
         /// </summary>
         private double longitude;
+        /// <summary>
+        /// Ciudades vecinas y distancia respectivas a ellos key, identificar ciudad, value: distancia
+        /// </summary>
+        private Hashtable adjacencies;
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
         *--------------------------------------------------------------------------------------------
         **/
 
-        public City(int nId,String nName,String nCountry, int nPopulation,double nLatitude, double nLongitude)
+        public City(int nId, String nName, String nCountry, int nPopulation, double nLatitude, double nLongitude, Hashtable a)
         {
             id = nId;
             name = nName;
@@ -56,6 +59,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             population = nPopulation;
             latitude = nLatitude;
             longitude = nLongitude;
+            adjacencies = a;
         }
     }
 }
