@@ -40,6 +40,12 @@ namespace SimulatedAnneling.DAO
             connection = new MySqlConnection(builder.ToString());
             connection.Open();
         }
+
+        public MySqlDataReader execute(String sql)
+        {
+            MySqlCommand cmd = new MySqlCommand(sql,connection);
+            return cmd.ExecuteReader();
+        }
         
     }
 }

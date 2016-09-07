@@ -25,9 +25,9 @@ namespace SimulatedAnneling
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            gmap.MapProvider = GMap.NET.MapProviders.BingMapProvider.Instance;
+            /*gmap.MapProvider = GMap.NET.MapProviders.BingMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
-            gmap.SetCurrentPositionByKeywords("Maputo, Mozambique");
+            gmap.SetCurrentPositionByKeywords("Maputo, Mozambique");*/
         }
     }
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using SimulatedAnneling.Model.TravelerSalesmanProblem;
+using System.Collections;
 namespace SimulatedAnneling.Controller
 {
     public class TravelerSalesmanProblem
@@ -84,5 +85,46 @@ namespace SimulatedAnneling.Controller
         /// la solución inicial
         /// </summary>
         private const double ACCEPTED_SOLUTIONS = 0.9356;
+
+        /**-------------------------------------------------------------------------------------------
+         * Atributos
+         *--------------------------------------------------------------------------------------------
+         **/
+        ///<summary>
+        ///Objeto contiene toda la información de las ciudades
+        ///</summary>
+        private TourManager tourManager;
+
+        /// <summary>
+        /// Referencia única del controlador
+        /// </summary>
+        private static TravelerSalesmanProblem singleton = null;
+
+        /**-------------------------------------------------------------------------------------------
+         * Métodos
+         *--------------------------------------------------------------------------------------------
+         **/
+        private TravelerSalesmanProblem()
+        {
+            tourManager = new TourManager(SERVER, USER_ID, PASSWORD, DATA_BASE);
+        }
+        /// <summary>
+        /// Obtiene la instancia única de la clase
+        /// </summary>
+        /// <returns>instancia única de la clase</returns>
+        public static TravelerSalesmanProblem getInstance()
+        {
+            if (singleton == null)
+                singleton = new TravelerSalesmanProblem();
+            return singleton;
+        }
+        /// <summary>
+        /// Entrega ciudades participantes en el problema
+        /// </summary>
+        /// <returns>ciudades del problema tsp</returns>
+        public ArrayList getCities()
+        {
+            return tourManager.getCities();
+        }
     }
 }

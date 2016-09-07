@@ -101,5 +101,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 return INFINITE;
             }
         }   
+        public double getLatitude()
+        {
+            return latitude;
+        }
+        public double getLongitude()
+        {
+            return longitude;
+        }
     }
 }

@@ -32,14 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\..\GMap.NET Build-ef25f7c93e70-20150401\Release-NETv4.0\GMap.NET.Core.dll</HintPath>
+    <Reference Include="BSE.Windows.Forms">
+      <HintPath>gmap\BSE.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\..\GMap.NET Build-ef25f7c93e70-20150401\Release-NETv4.0\GMap.NET.WindowsForms.dll</HintPath>
+    <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>gmap\GMap.NET.Core.dll</HintPath>
     </Reference>
-    <Reference Include="GMap.NET.WindowsPresentation">
-      <HintPath>..\..\GMap.NET Build-ef25f7c93e70-20150401\Release-NETv4.0\GMap.NET.WindowsPresentation.dll</HintPath>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>gmap\GMap.NET.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -74,11 +76,23 @@
     <Compile Include="ObserverPattern\Observable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\Init.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Init.Designer.cs">
+      <DependentUpon>Init.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MapView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\MapView.Designer.cs">
       <DependentUpon>MapView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SimulationSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SimulationSettings.Designer.cs">
+      <DependentUpon>SimulationSettings.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -92,8 +106,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\Init.resx">
+      <DependentUpon>Init.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SimulationSettings.resx">
+      <DependentUpon>SimulationSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

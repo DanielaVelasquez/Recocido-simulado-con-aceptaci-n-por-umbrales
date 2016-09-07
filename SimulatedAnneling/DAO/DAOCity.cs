@@ -37,10 +37,7 @@ namespace SimulatedAnneling.DAO
         {
             ArrayList cities = new ArrayList();
 
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.CommandText = "SELECT * FROM CITIES";
-
-            MySqlDataReader reader = cmd.ExecuteReader();
+            MySqlDataReader reader = citySQL.execute("SELECT * FROM CITIES");
             while (reader.Read())
             {
                 String id = reader[0].ToString();
