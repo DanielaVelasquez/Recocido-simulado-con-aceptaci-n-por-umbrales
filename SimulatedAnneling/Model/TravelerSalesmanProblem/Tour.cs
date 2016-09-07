@@ -27,6 +27,10 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             cities = new ArrayList();
         }
+        public Tour(ArrayList c)
+        {
+            cities = c;
+        }
 
         /// <summary>
         /// Adiciona una ciudad al tour

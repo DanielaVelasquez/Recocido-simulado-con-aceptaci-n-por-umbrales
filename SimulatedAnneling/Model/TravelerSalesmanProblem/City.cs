@@ -61,5 +61,21 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             longitude = nLongitude;
             adjacencies = a;
         }
+        /// <summary>
+        /// Obtiene el identificador de la ciudad
+        /// </summary>
+        /// <returns>identificador de la ciudad</returns>
+        public int getId()
+        {
+            return id;
+        }
+        /// <summary>
+        /// Obtiene la tabla de adyacencias de la ciudad
+        /// </summary>
+        /// <returns>tabla de adyacencias de la ciudad</returns>
+        public Hashtable getAdjacencies()
+        {
+            return adjacencies;
+        }
     }
 }
