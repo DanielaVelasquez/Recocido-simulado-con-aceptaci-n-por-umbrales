@@ -53,5 +53,36 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             return MemberwiseClone();
         }
+        public double calculateCostFunction()
+        {
+            //Recorre todas las ciudades menos la ultima
+            double sum = 0;
+            for(int i=0; i<cities.Count - 1; i++)
+            {
+                City c = (City) cities[i];
+                City next = (City)  cities[i+1];
+                sum = sum + c.distanceTo(next.getId());
+            }
+            return sum / City.INFINITE;
+        }
+        public ISolution getNeighbour(Random random)
+        {
+            //TODO mover las dos ciudades con más distancias posibles
+            int index1 = random.Next(0, cities.Count);
+            int index2 = index1;
+            while(index1 == index2)
+            {
+                index2 = random.Next(0,cities.Count);
+            }
+            ArrayList s = (ArrayList)cities.Clone();
+            City c1 = (City)s[index1];
+            City c2 = (City)s[index2];
+            s.Remove(c1);
+            s.Remove(c2);
+            s.Insert(index1, c1);
+            s.Insert(index2, c2);
+            return new Tour(s);
+
+        }
     }
 }

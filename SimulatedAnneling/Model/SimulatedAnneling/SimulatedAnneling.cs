@@ -144,7 +144,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             //Cantidad de vecinos aceptados
             int neighbours_accepted = 0;
             //Suma costos de función de todos los vecinos aceptados
-            float costs_functions = 0;
+            double costs_functions = 0;
             //Cantidad de iteraciones
             int iterations = 0;
             //Creación de un lote

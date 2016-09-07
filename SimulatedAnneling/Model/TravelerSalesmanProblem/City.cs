@@ -13,6 +13,14 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
     public class City
     {
         /**-------------------------------------------------------------------------------------------
+         * Constantes
+         *--------------------------------------------------------------------------------------------
+         **/
+        ///<summary>
+        ///Valor permite representar la no existencia de conexión entre una ciudad y otra
+        ///</summary>
+        public const double INFINITE = double.MaxValue;
+        /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
          **/
@@ -77,5 +85,21 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             return adjacencies;
         }
+        /// <summary>
+        /// Retorna la distancia existente entre la ciudad y la ciuda con identificador id
+        /// </summary>
+        /// <param name="id">identificador ciudad a la que se quiere saber la distancia</param>
+        /// <returns>distancia entre la ciudad actual y la ciudad con identificador id</returns>
+        public double distanceTo(int id)
+        {
+            try
+            {
+                return (double) adjacencies[id] ;
+            }
+            catch
+            {
+                return INFINITE;
+            }
+        }   
     }
 }

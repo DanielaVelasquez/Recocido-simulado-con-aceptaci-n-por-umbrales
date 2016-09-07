@@ -151,13 +151,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             if(list.Count>0)
             {
-                int max = -1;
+                double max = -1;
                 int city = -1;
                 foreach (DictionaryEntry de in list)
                 {
                     if((int) de.Value>max)
                     {
-                        max = (int) de.Value;
+                        max = (double) de.Value;
                         city = (int) de.Key;
                     }
                 }

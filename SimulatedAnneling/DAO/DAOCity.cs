@@ -66,9 +66,9 @@ namespace SimulatedAnneling.DAO
             while (reader2.Read())
             {
                 if (reader2[0].ToString().Equals(id))
-                    adjacencies.Add(reader2[1], reader2[2]);
+                    adjacencies.Add(int.Parse(reader2[1].ToString()), double.Parse(reader2[2].ToString()));
                 else
-                    adjacencies.Add(reader2[0], reader2[2]);
+                    adjacencies.Add(int.Parse(reader2[0].ToString()), double.Parse(reader2[2].ToString()));
             }
             return adjacencies;
         }
