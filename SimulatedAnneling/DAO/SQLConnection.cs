@@ -24,6 +24,7 @@ namespace SimulatedAnneling.DAO
         /// Objeto establece conexión con la base de datos
         /// </summary>
         private MySqlConnection connection;
+        MySqlCommand cmd;
 
         /**-------------------------------------------------------------------------------------------
          * Metodos
@@ -37,12 +38,19 @@ namespace SimulatedAnneling.DAO
             builder.UserID = userId;
             builder.Password = password;
             builder.Database = database;
+
             connection = new MySqlConnection(builder.ToString());
             connection.Open();
+            
         }
-
+        /// <summary>
+        /// Ejecuta una consulta
+        /// </summary>
+        /// <param name="sql">consulta</param>
+        /// <returns>Objeto permite manejar resultado</returns>
         public MySqlDataReader execute(String sql)
         {
+            
             MySqlCommand cmd = new MySqlCommand(sql,connection);
             return cmd.ExecuteReader();
         }

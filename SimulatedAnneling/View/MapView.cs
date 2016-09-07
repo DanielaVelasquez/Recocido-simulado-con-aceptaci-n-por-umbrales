@@ -48,13 +48,14 @@ namespace SimulatedAnneling.View
             configurateMapControl();
             //Obtiene instancia controlador
             controller = TravelerSalesmanProblem.getInstance();
+            drawCities();
         }
         private void drawCities()
         {
             ArrayList cities = controller.getCities();
             foreach(City c in cities)
             {
-                GMapMarkerGoogleGreen marker = new GMapMarkerGoogleGreen(new PointLatLng(c.getLatitude(), c.getLongitude()));
+                GMapMarkerGoogleRed marker = new GMapMarkerGoogleRed(new PointLatLng(c.getLatitude(), c.getLongitude()));
                 overlayOne.Markers.Add(marker);
             }
             gmap.Overlays.Add(overlayOne);

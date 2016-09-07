@@ -41,33 +41,41 @@ namespace SimulatedAnneling.DAO
             while (reader.Read())
             {
                 String id = reader[0].ToString();
-                Hashtable adjacencies = getAdjacencies(id);
+                //Hashtable adjacencies = getAdjacencies(id);
                 City c = new City(int.Parse(reader[0].ToString()), reader[1].ToString(), reader[2].ToString(), int.Parse(reader[3].ToString()),
-                                  double.Parse(reader[4].ToString()), double.Parse(reader[5].ToString()),adjacencies);
+                                  double.Parse(reader[4].ToString()), double.Parse(reader[5].ToString()));
                 cities.Add(c);
             }
-            return cities;
+            reader.Close();
+            return getAdjacencies(cities);
         }
         /// <summary>
         /// Obtiene las adyacencias de una ciudad a partir de su id y guarda en una tabla hash el id de la ciudad
         /// a la qu es vecina junto con su respectiva distancia
         /// </summary>
-        /// <param name="id">identificador de la ciudad a la que se quiere encontrar adyacencias</param>
-        /// <returns></returns>
-        private Hashtable getAdjacencies(String id)
+        /// <param name="cities">conjunto de ciudades a las cuales se les va a encontrar las adyacnecias</param>
+        /// <returns>ciudades con sus adyacencias</returns>
+        private ArrayList getAdjacencies(ArrayList cities)
         {
-            Hashtable adjacencies = new Hashtable();
-            MySqlCommand cmd2 = new MySqlCommand();
-            cmd2.CommandText = "SELECT * FROM connections WHERE id_city_1 = " + id + " OR id_city_2 = " + id;
-            MySqlDataReader reader2 = cmd2.ExecuteReader();
-            while (reader2.Read())
+            foreach(City c in cities)
             {
-                if (reader2[0].ToString().Equals(id))
-                    adjacencies.Add(int.Parse(reader2[1].ToString()), double.Parse(reader2[2].ToString()));
-                else
-                    adjacencies.Add(int.Parse(reader2[0].ToString()), double.Parse(reader2[2].ToString()));
+                String id = ""+c.getId();
+                Hashtable adjacencies = new Hashtable();
+
+                MySqlDataReader reader2 = citySQL.execute("SELECT * FROM connections WHERE id_city_1 = " + id + " OR id_city_2 = " + id);
+                while (reader2.Read())
+                {
+                    if (reader2[0].ToString().Equals(id))
+                        adjacencies.Add(int.Parse(reader2[1].ToString()), double.Parse(reader2[2].ToString()));
+                    else
+                        adjacencies.Add(int.Parse(reader2[0].ToString()), double.Parse(reader2[2].ToString()));
+                }
+                reader2.Close();
+                c.setAdjacencies(adjacencies);
             }
-            return adjacencies;
+           
+            return cities;
         }
+        
     }
 }

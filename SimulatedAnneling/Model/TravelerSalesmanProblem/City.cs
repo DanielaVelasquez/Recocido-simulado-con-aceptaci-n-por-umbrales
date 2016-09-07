@@ -59,7 +59,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         *--------------------------------------------------------------------------------------------
         **/
 
-        public City(int nId, String nName, String nCountry, int nPopulation, double nLatitude, double nLongitude, Hashtable a)
+        public City(int nId, String nName, String nCountry, int nPopulation, double nLatitude, double nLongitude)
         {
             id = nId;
             name = nName;
@@ -67,6 +67,9 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             population = nPopulation;
             latitude = nLatitude;
             longitude = nLongitude;
+        }
+        public void setAdjacencies(Hashtable a)
+        {
             adjacencies = a;
         }
         /// <summary>
