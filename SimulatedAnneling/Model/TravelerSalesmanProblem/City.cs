@@ -112,5 +112,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             return longitude;
         }
+        public String getName()
+        {
+            return name;
+        }
+        public String getCountry()
+        {
+            return country;
+        }
     }
 }

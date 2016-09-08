@@ -180,6 +180,7 @@
             this.btn_simulate.TabIndex = 2;
             this.btn_simulate.Text = "Simulate";
             this.btn_simulate.UseVisualStyleBackColor = true;
+            this.btn_simulate.Click += new System.EventHandler(this.btn_simulate_Click);
             // 
             // MapView
             // 

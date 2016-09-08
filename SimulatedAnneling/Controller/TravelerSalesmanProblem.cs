@@ -126,5 +126,15 @@ namespace SimulatedAnneling.Controller
         {
             return tourManager.getCities();
         }
+        /// <summary>
+        /// Encuentra una ciudad según su posición a partir de todas las ciudades disponibles del problema
+        /// </summary>
+        /// <param name="latitude">Latitud de la ciudad a buscar</param>
+        /// <param name="longitude">Longitud de la ciudad a buscar</param>
+        /// <returns></returns>
+        public City findCityBy(double latitude, double longitude)
+        {
+            return tourManager.findCityBy(latitude, longitude, getCities());
+        }
     }
 }

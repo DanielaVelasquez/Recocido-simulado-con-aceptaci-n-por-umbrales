@@ -56,10 +56,11 @@ namespace SimulatedAnneling.View
             foreach(City c in cities)
             {
                 GMapMarkerGoogleRed marker = new GMapMarkerGoogleRed(new PointLatLng(c.getLatitude(), c.getLongitude()));
+                marker.ToolTipText = c.getName() + ", " + c.getCountry();
                 overlayOne.Markers.Add(marker);
+                
             }
             gmap.Overlays.Add(overlayOne);
-
         }
         /// <summary>
         /// Configura el controlador de mapa para que tenga un zoom máximo, mínimo; se define la escala de 
@@ -100,7 +101,22 @@ namespace SimulatedAnneling.View
             gmap.CanDragMap = true;
             gmap.Manager.Mode = AccessMode.ServerAndCache;
             overlayOne = new GMapOverlay(gmap, "OverlayOne");
+
+            //gmap.Click += new System.EventHandler(this.markerClick);
+            //Evento para saber cuando una marca fue seleccionada
+            gmap.OnMarkerClick += new MarkerClick(this.markerClick);
             
+        }
+        private void markerClick(object sender, EventArgs e)
+        {
+            //if(((GMapControl)sender).IsMouseOverMarker)
+            GMapMarkerGoogleRed marker = (GMapMarkerGoogleRed)sender;
+            City c = controller.findCityBy(marker.Position.Lat, marker.Position.Lng);
+            Console.WriteLine(": "+c.getCountry());
+        }
+        private void btn_simulate_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

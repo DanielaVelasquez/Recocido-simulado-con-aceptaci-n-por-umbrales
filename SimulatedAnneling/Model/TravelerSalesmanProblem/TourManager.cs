@@ -182,6 +182,23 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             return null;
         }
         /// <summary>
+        /// Busca un ciudad en una lista de ciudades según su posicion
+        /// </summary>
+        /// <param name="latitude">Latitud de la ciudad a buscar</param>
+        /// <param name="longitude">Longitud de la ciudad a buscar</param>
+        /// <param name="cities">Conjunto de ciudades en la que se desea buscar</param>
+        /// <returns>Ciudad con la posicion solicitado, regresa null en caso de 
+        /// no encontrar la ciudad correspondiente</returns>
+        public City findCityBy(double latitude, double longitude,ArrayList cities)
+        {
+            foreach (City c in cities)
+            {
+                if (c.getLatitude() == latitude && c.getLongitude() == longitude)
+                    return c;
+            }
+            return null;
+        }
+        /// <summary>
         /// Asigna ciudades incluidas en la simulación
         /// </summary>
         /// <param name="c">ciudades incluidas en la simulación</param>
