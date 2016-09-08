@@ -120,5 +120,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             return country;
         }
+        public int getPopulation()
+        {
+            return population;
+        }
+        public override string ToString()
+        {
+            return getName() + ", " + getCountry();
+        }
     }
 }

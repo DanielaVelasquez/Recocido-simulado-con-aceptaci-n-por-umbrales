@@ -56,7 +56,7 @@ namespace SimulatedAnneling.View
             foreach(City c in cities)
             {
                 GMapMarkerGoogleRed marker = new GMapMarkerGoogleRed(new PointLatLng(c.getLatitude(), c.getLongitude()));
-                marker.ToolTipText = c.getName() + ", " + c.getCountry();
+                marker.ToolTipText = c.ToString();
                 overlayOne.Markers.Add(marker);
                 
             }
@@ -112,7 +112,63 @@ namespace SimulatedAnneling.View
             //if(((GMapControl)sender).IsMouseOverMarker)
             GMapMarkerGoogleRed marker = (GMapMarkerGoogleRed)sender;
             City c = controller.findCityBy(marker.Position.Lat, marker.Position.Lng);
-            Console.WriteLine(": "+c.getCountry());
+            if(c!=null)
+            {
+                setName(c.getName());
+                setCountry(c.getCountry());
+                setPopulation(c.getPopulation());
+                setLatitude(c.getLatitude());
+                setLongitude(c.getLongitude());
+            }
+        }
+        /// <summary>
+        /// Muestras las conexiones de una ciudad
+        /// </summary>
+        /// <param name="c"></param>
+        private void setConnectedCities(ArrayList c)
+        {
+            lsbox_connectedCities.Items.AddRange(c.ToArray());
+        }
+        /// <summary>
+        /// Muestra longitud la ciudad
+        /// </summary>
+        /// <param name="name">cantidad habitantes</param>
+        private void setLongitude(double value)
+        {
+            txt_longitude.Text = "" + value;
+        }
+        /// <summary>
+        /// Muestra latitud la ciudad
+        /// </summary>
+        /// <param name="name">cantidad habitantes</param>
+        private void setLatitude(double value)
+        {
+            txt_latitude.Text = "" + value;
+        }
+        /// <summary>
+        /// Muestra cantidad habitantes la ciudad
+        /// </summary>
+        /// <param name="name">cantidad habitantes</param>
+        private void setPopulation(int value)
+        {
+            txt_population.Text = ""+value;
+        }
+        /// <summary>
+        /// Muestra nuevo nombre del país al que pertenece la ciudad
+        /// </summary>
+        /// <param name="name">Nombre país desea mostrar</param>
+        private void setCountry(String country)
+        {
+            txt_country.Text = country;
+        }
+
+        /// <summary>
+        /// Muestra nuevo nombre de la ciudad
+        /// </summary>
+        /// <param name="name">Nombre ciudad desea mostrar</param>
+        private void setName(String name)
+        {
+            txtName.Text = name;
         }
         private void btn_simulate_Click(object sender, EventArgs e)
         {
