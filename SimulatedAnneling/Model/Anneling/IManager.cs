@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulatedAnneling.Model.SimulatedAnneling
+namespace SimulatedAnneling.Model.Anneling
 {
     /// <summary>
     /// Modela el administrador del problema, encargado de proveer

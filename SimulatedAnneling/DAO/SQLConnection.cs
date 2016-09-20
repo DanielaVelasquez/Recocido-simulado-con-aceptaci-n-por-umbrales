@@ -24,7 +24,6 @@ namespace SimulatedAnneling.DAO
         /// Objeto establece conexión con la base de datos
         /// </summary>
         private MySqlConnection connection;
-        MySqlCommand cmd;
 
         /**-------------------------------------------------------------------------------------------
          * Metodos

@@ -86,32 +86,41 @@
             this.lsbox_connectedCities.Name = "lsbox_connectedCities";
             this.lsbox_connectedCities.Size = new System.Drawing.Size(294, 246);
             this.lsbox_connectedCities.TabIndex = 10;
+            this.lsbox_connectedCities.SelectedIndexChanged += new System.EventHandler(this.lsbox_connectedCities_SelectedIndexChanged);
             // 
             // txt_longitude
             // 
+            this.txt_longitude.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txt_longitude.Location = new System.Drawing.Point(105, 265);
             this.txt_longitude.Name = "txt_longitude";
+            this.txt_longitude.ReadOnly = true;
             this.txt_longitude.Size = new System.Drawing.Size(209, 27);
             this.txt_longitude.TabIndex = 9;
             // 
             // txt_latitude
             // 
+            this.txt_latitude.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txt_latitude.Location = new System.Drawing.Point(105, 210);
             this.txt_latitude.Name = "txt_latitude";
+            this.txt_latitude.ReadOnly = true;
             this.txt_latitude.Size = new System.Drawing.Size(209, 27);
             this.txt_latitude.TabIndex = 8;
             // 
             // txt_population
             // 
+            this.txt_population.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txt_population.Location = new System.Drawing.Point(105, 154);
             this.txt_population.Name = "txt_population";
+            this.txt_population.ReadOnly = true;
             this.txt_population.Size = new System.Drawing.Size(209, 27);
             this.txt_population.TabIndex = 7;
             // 
             // txt_country
             // 
+            this.txt_country.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txt_country.Location = new System.Drawing.Point(105, 102);
             this.txt_country.Name = "txt_country";
+            this.txt_country.ReadOnly = true;
             this.txt_country.Size = new System.Drawing.Size(209, 27);
             this.txt_country.TabIndex = 6;
             // 
@@ -157,8 +166,10 @@
             // 
             // txtName
             // 
+            this.txtName.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtName.Location = new System.Drawing.Point(105, 50);
             this.txtName.Name = "txtName";
+            this.txtName.ReadOnly = true;
             this.txtName.Size = new System.Drawing.Size(209, 27);
             this.txtName.TabIndex = 1;
             // 
@@ -190,7 +201,8 @@
             this.Controls.Add(this.btn_simulate);
             this.Controls.Add(this.grBxInformation);
             this.Name = "MapView";
-            this.Text = "MapView";
+            this.Text = "Traveler salesman problem";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MapView_FormClosed);
             this.Load += new System.EventHandler(this.MapView_Load);
             this.grBxInformation.ResumeLayout(false);
             this.grBxInformation.PerformLayout();

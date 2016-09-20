@@ -16,7 +16,9 @@ namespace SimulatedAnneling
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SimulatedAnneling.View.MapView());
+            SimulatedAnneling.View.SimulationSettings a = new SimulatedAnneling.View.SimulationSettings();
+            Application.Run(a);
+            //
         }
     }
 }

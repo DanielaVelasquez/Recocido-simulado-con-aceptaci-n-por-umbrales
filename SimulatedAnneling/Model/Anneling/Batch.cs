@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 
-namespace SimulatedAnneling.Model.SimulatedAnneling
+namespace SimulatedAnneling.Model.Anneling
 {
     /// <summary>
     /// Representa un lote producido al generar el recocido simulado
@@ -33,6 +33,10 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// Mejor solución del lote
         /// </summary>
         private ISolution best;
+        /// <summary>
+        /// Ultima solución aceptada por el lote
+        /// </summary>
+        private ISolution lastSolution;
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -88,6 +92,26 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         public ISolution getBest()
         {
             return best;
+        }
+        public override string ToString()
+        {
+            String r = "";
+            foreach(ISolution s in solutions)
+            {
+                r = r + " [ " + s.ToString() + " ] ";
+            }
+            r = r + "\nBEST: " + best.ToString();
+            return r;
+        }
+        public void setLastSolution(ISolution s)
+        {
+            lastSolution = s;
+            if (lastSolution.calculateCostFunction() < best.calculateCostFunction())
+                best = lastSolution;
+        }
+        public ISolution getLastSolution()
+        {
+            return lastSolution;
         }
     }
 }

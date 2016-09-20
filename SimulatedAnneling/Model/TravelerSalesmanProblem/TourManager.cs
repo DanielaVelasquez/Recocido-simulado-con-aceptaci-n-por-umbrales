@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-using SimulatedAnneling.Model.SimulatedAnneling;
+using SimulatedAnneling.Model.Anneling;
 using SimulatedAnneling.DAO;
 using SimulatedAnneling.Model.TravelerSalesmanProblem;
 
@@ -57,7 +57,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             sqlConnection = new SQLConnection(server, userId, password, database);
             cityDAO = new DAOCity(sqlConnection);
-            cities = cityDAO.getCities();
+            cities = cityDAO.getCities(this);
             numberCitiesSimulation = CITIES_SIMULATION_NULL;
             citiesSimulation = null;
         }
@@ -88,17 +88,26 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 
                 //Ciudades parte de la solución
                 ArrayList c = new ArrayList();
-                //Si hay ciudades en la simulación se adicionan como parte de la solución
-                if (citiesSimulation == null || citiesSimulation.Count == 0)
-                    c = (ArrayList) citiesSimulation.Clone();
                 //Ciudades que no han sido agregadas a la lista de ciudades solución
-                ArrayList copy = (ArrayList) cities.Clone();
+                ArrayList copy = (ArrayList)cities.Clone();
 
-                //Agrega primera ciudad de forma aleatoria
-                int index = random.Next(0,copy.Count);
-                City city = (City) copy[index];
-                copy.Remove(city);
-                c.Add(city);
+                City city = null;
+                int index = -1;
+
+                //Si hay ciudades en la simulación se adicionan como parte de la solución
+                if (citiesSimulation != null)
+                    c = (ArrayList) citiesSimulation.Clone();
+                else
+                {
+                    //Agrega primera ciudad de forma aleatoria
+                    index = random.Next(0, copy.Count);
+                    city = (City)copy[index];
+                    copy.Remove(city);
+                    c.Add(city);
+                }
+                
+
+                
 
                 //Escoger n ciudades forma aleatoria
                 while(c.Count != numberCitiesSimulation)
@@ -155,7 +164,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 int city = -1;
                 foreach (DictionaryEntry de in list)
                 {
-                    if((int) de.Value>max)
+                    if ((double)de.Value > max)
                     {
                         max = (double) de.Value;
                         city = (int) de.Key;
@@ -172,7 +181,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <param name="cities">Lista de ciudades en la que se desea buscar</param>
         /// <returns>Ciudad con el identificador solicitado, regresa null en caso de 
         /// no encontrar la ciudad correspondiente</returns>
-        private City findCityBy(int id,ArrayList cities)
+        public City findCityBy(int id,ArrayList cities)
         {
             foreach(City c in cities)
             {
@@ -205,6 +214,14 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         public void setCitiesSimulation(ArrayList c)
         {
             citiesSimulation = c;
+        }
+        /// <summary>
+        /// Cuenta la cantidad de ciudades participantes en el problema
+        /// </summary>
+        /// <returns>cantidad ciudades problema</returns>
+        public int countCities()
+        {
+            return cities.Count;
         }
          
 

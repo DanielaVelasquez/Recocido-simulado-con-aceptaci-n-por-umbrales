@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using SimulatedAnneling.ObserverPattern;
 
-namespace SimulatedAnneling.Model.SimulatedAnneling
+namespace SimulatedAnneling.Model.Anneling
 {
     /// <summary>
     /// Modela recocido simulado a partir de un problema
@@ -37,7 +37,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <summary>
         /// Lotes generados durante la simulación del recocido
         /// </summary>
-        private ArrayList batchs;
+        private ArrayList batches;
         /// <summary>
         /// Administrador del problema que se desea resolver
         /// </summary>
@@ -108,7 +108,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <param name="nSeed">Valor de la semilla para obtener la aletoridad</param>
         public SimulatedAnneling(int nSeed, double COOLING_FACTOR, int BATCH_SIZE, int MAX_ITERATION_BATCH
                                  , double EP, double E, int INITIAL_TEMPERATURE, double ET, double EACCEPTED
-                                 , int N, double ACCEPTED_SOLUTIONS)
+                                 , int N, double ACCEPTED_SOLUTIONS,IManager m)
         {
             this.ACCEPTED_SOLUTIONS = ACCEPTED_SOLUTIONS;
             this.N = N;
@@ -124,7 +124,8 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
             bestSolution = null;
-            batchs = new ArrayList();
+            batches = new ArrayList();
+            manager = m;
         }
         /// <summary>
         /// Realiza la simulación del recocido y retorna la mejor solución encontrada
@@ -132,14 +133,24 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         /// <returns>Mejor solución encontrada</returns>
         public ISolution simulate()
         {
+            //DateTime inicio = DateTime.Now;
             //Genera una solución inicial
             ISolution initialSolution = manager.getRamdomSolution(random);
+            double a = initialSolution.calculateCostFunction();
             //Calcula la temperatura inicial del problema 
+            //DateTime inicio_temp = DateTime.Now;
             temperature = initialTemperature(initialSolution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
+            //DateTime end_temp = DateTime.Now;
+            //Console.WriteLine((end_temp - inicio_temp).ToString());
             //Se inicia de nuevo el random
             random = new Random(seed);
+            //Genera una solución inicial
+            initialSolution = manager.getRamdomSolution(random);
             bestSolution = initialSolution;
             simulatedAnneling(initialSolution);
+            //DateTime end = DateTime.Now;
+            //TimeSpan t = end - inicio;
+            //Console.WriteLine("Acabe "+t.ToString());
             return bestSolution;
 
         }
@@ -158,8 +169,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             int iterations = 0;
             //Creación de un lote
             Batch batch = new Batch(temperature);
-            //Adiciona primera solucion
-            batch.addSolution(solution);
+            
             //Se asume como mejor solución a la solución inicial dada
             batch.setBest(solution);
             while(neighbours_accepted < BATCH_SIZE && iterations < MAX_ITERATION_BATCH)
@@ -168,20 +178,22 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                 if (isAccepted(neighbour,solution,temperature))
                 {
                     solution = neighbour;
+                    batch.setLastSolution(solution);
                     neighbours_accepted = neighbours_accepted + 1;
                     costs_functions = costs_functions + neighbour.calculateCostFunction();
                     //Adiciona el vecino aceptado
-                    batch.addSolution(neighbour);   
+                    batch.addSolution(neighbour); 
                 }
+                
                 iterations = iterations + 1;
             }
             //Determina si el lote acabó 
             batch.setIsFinished(neighbours_accepted <= BATCH_SIZE);
             //Adiciona el lote al conjunto de lotes del problema
-            batchs.Add(batch);
+            batches.Add(batch);
             //Se guarda la mejor solución del lote
             batch.setBest(solution);
-            return costs_functions / BATCH_SIZE;
+            return costs_functions / (double) BATCH_SIZE;
         }
         /// <summary>
         /// Determina si un vecino es aceptado a partir de la temperatura y la solución 
@@ -211,7 +223,7 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
             while(temperature>E && isWorking)
             {
                 double p1 = 0;
-                while(Math.Abs(p-p1)>EP)
+                while(Math.Abs(p-p1)>EP && isWorking)
                 {
                     double temp = calculateBatch(solution);
                     //Si el último lote terminó
@@ -219,9 +231,10 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                     {
                         p1 = p;
                         p = temp;
-                        solution = getLastBatch().getBest();
-                        //Si es la mejor solucion se guarda
-                        if (isAccepted(solution, bestSolution, temperature))
+                        solution = getLastBatch().getLastSolution();
+
+                        //Ver si la mejor solucion del lote es la mejor solucion que se ha generado
+                        if (getLastBatch().getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
                             bestSolution = solution;
                     }
                     else
@@ -240,9 +253,9 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         private Batch getLastBatch()
         {
             //Obtiene indice del ultimo lote en la lista de lotes
-            int lastIndex = batchs.Count - 1;
+            int lastIndex = batches.Count - 1;
             if (lastIndex>=0)
-                return (Batch)batchs[lastIndex];
+                return (Batch)batches[lastIndex];
             return null;
         }
         /// <summary>
@@ -369,9 +382,10 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
                 //para explorar más en el conjunto de soluciones
                 solution = neighbour;
             }
+            double a = (double) accepted / (double)  N;
             //Retorna cantidad de soluciones aceptadas sobre el numero
             //de soluciones que se generon en total
-            return accepted / N;
+            return a;
         }
         /// <summary>
         /// Realiza busqueda binaria para encontrar una temperatura media entre 
@@ -435,6 +449,20 @@ namespace SimulatedAnneling.Model.SimulatedAnneling
         public double getTemperature()
         {
             return temperature;
+        }
+
+        public override string ToString()
+        {
+            String r = "Temperature: " + getTemperature() + "\n" +
+                   "Best solution: " + bestSolution.ToString() + "\n" +
+                   "Seed: " + seed + "\n" +
+                   "Batchs: \n";
+            foreach(Batch b in batches)
+            {
+                r = r + "{ " + b.ToString() + " }";
+            }
+
+            return r;
         }
     }
 }

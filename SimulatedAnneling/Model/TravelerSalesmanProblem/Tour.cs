@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimulatedAnneling.Model.SimulatedAnneling;
+using SimulatedAnneling.Model.Anneling;
 using System.Collections;
 
 namespace SimulatedAnneling.Model.TravelerSalesmanProblem
@@ -79,10 +79,25 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             City c2 = (City)s[index2];
             s.Remove(c1);
             s.Remove(c2);
-            s.Insert(index1, c1);
-            s.Insert(index2, c2);
+            if (index1 > s.Count)
+                s.Add(c2);
+            else
+                s.Insert(index1, c2);
+            if (index2 > s.Count)
+                s.Add(c1);
+            else
+                s.Insert(index2, c1);
             return new Tour(s);
 
+        }
+        public override string ToString()
+        {
+            String s = "Cost function: "+calculateCostFunction()+"\n";
+            foreach(City c in cities)
+            {
+                s = s + " [ " + c.ToString() + " ]";
+            }
+            return s;
         }
     }
 }

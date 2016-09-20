@@ -19,7 +19,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         ///<summary>
         ///Valor permite representar la no existencia de conexión entre una ciudad y otra
         ///</summary>
-        public const double INFINITE = double.MaxValue;
+        public const double INFINITE = 22171957741.07997;//double.MaxValue;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -53,13 +53,17 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// Ciudades vecinas y distancia respectivas a ellos key, identificar ciudad, value: distancia
         /// </summary>
         private Hashtable adjacencies;
+        /// <summary>
+        /// Tour manager en el cual se encuentra la gestión de la ciudad
+        /// </summary>
+        private TourManager manager;
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
         *--------------------------------------------------------------------------------------------
         **/
 
-        public City(int nId, String nName, String nCountry, int nPopulation, double nLatitude, double nLongitude)
+        public City(int nId, String nName, String nCountry, int nPopulation, double nLatitude, double nLongitude,TourManager m)
         {
             id = nId;
             name = nName;
@@ -67,6 +71,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             population = nPopulation;
             latitude = nLatitude;
             longitude = nLongitude;
+            manager = m;
         }
         public void setAdjacencies(Hashtable a)
         {
@@ -97,13 +102,36 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             try
             {
-                return (double) adjacencies[id] ;
+                double l = (double)adjacencies[id];
+                return  l;
             }
             catch
             {
                 return INFINITE;
             }
         }   
+        /// <summary>
+        /// Obtiene una lista de la ciudades adyacentes a la ciudad actual
+        /// </summary>
+        /// <returns>listado de ciudades adyacentes</returns>
+        public ArrayList getAdjacentCities()
+        {
+
+            ArrayList cities = new ArrayList();
+            foreach(DictionaryEntry de in adjacencies)
+            {
+                int id = (int)de.Key;
+                City c = manager.findCityBy(id, manager.getCities());
+                if (c != null)
+                {
+                    cities.Add(c);
+                }
+                else
+                    throw new Exception("City " + this.ToString() + " has an adjacency not define in its tour manager");
+
+            }
+            return cities;
+        }
         public double getLatitude()
         {
             return latitude;

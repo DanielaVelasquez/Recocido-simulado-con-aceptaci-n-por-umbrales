@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SimulatedAnneling.Model.TravelerSalesmanProblem;
 using System.Collections;
+using SimulatedAnneling.Model.Anneling;
+using System.Threading;
+using System.IO;
 namespace SimulatedAnneling.Controller
 {
     public class TravelerSalesmanProblem
@@ -34,7 +37,7 @@ namespace SimulatedAnneling.Controller
         /// Factor de enfriamiento del sistema, determina que tan rápido o lento
         /// la temperatura disminuyendo
         /// </summary>
-        private const double COOLING_FACTOR = 0.65432;
+        private const double COOLING_FACTOR = 0.61946875;
 
         /// <summary>
         /// Tamaño de los lotes que se van a generar
@@ -50,12 +53,13 @@ namespace SimulatedAnneling.Controller
         /// <summary>
         /// Cero virtual para el equilibrio témico
         /// </summary>
-        private const double EP = 0.025;
+        private const double EP = 0.8142;
+
 
         /// <summary>
         /// Cero virtual para la temperatura
         /// </summary>
-        private const double E = 0.015;
+        private const double E = 0.79;
 
         /// <summary>
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
@@ -68,13 +72,13 @@ namespace SimulatedAnneling.Controller
         /// busqueda binaria, al preguntar por la diferencia
         /// de sus temperaturas
         /// </summary>
-        private const double ET = 0.036;
-
+        private const double ET = 0.43;
+        
         /// <summary>
         /// Cero virtual para algoritmo de busqueda binaria
         /// con base en el promedio de los aceptados
         /// </summary>
-        private const double EACCEPTED = 0.0025;
+        private const double EACCEPTED = 0.025;
         /// <summary>
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
@@ -84,7 +88,7 @@ namespace SimulatedAnneling.Controller
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
         /// </summary>
-        private const double ACCEPTED_SOLUTIONS = 0.9356;
+        private const double ACCEPTED_SOLUTIONS = 0.8756;
 
         /**-------------------------------------------------------------------------------------------
          * Atributos
@@ -99,6 +103,12 @@ namespace SimulatedAnneling.Controller
         /// Referencia única del controlador
         /// </summary>
         private static TravelerSalesmanProblem singleton = null;
+        /// <summary>
+        /// Lista de simulaciones
+        /// </summary>
+        private ArrayList simulations;
+
+        private ArrayList a = new ArrayList();
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -107,6 +117,7 @@ namespace SimulatedAnneling.Controller
         private TravelerSalesmanProblem()
         {
             tourManager = new TourManager(SERVER, USER_ID, PASSWORD, DATA_BASE);
+            simulations = new ArrayList();
         }
         /// <summary>
         /// Obtiene la instancia única de la clase
@@ -135,6 +146,105 @@ namespace SimulatedAnneling.Controller
         public City findCityBy(double latitude, double longitude)
         {
             return tourManager.findCityBy(latitude, longitude, getCities());
+        }
+        /// <summary>
+        /// Cuenta la cantidad de ciudades participantes en el problema
+        /// </summary>
+        /// <returns>cantidad ciudades problema</returns>
+        public int countCities()
+        {
+            return tourManager.countCities();
+        }
+
+        public void addSimulation(int seed)
+        {
+            SimulatedAnneling.Model.Anneling.SimulatedAnneling s = new SimulatedAnneling.Model.Anneling.SimulatedAnneling(seed, COOLING_FACTOR, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS,tourManager);
+            simulations.Add(s);
+        }
+
+        public void simulate(int cities)
+        {
+            tourManager.setCitiesSimulation(cities);
+            foreach( SimulatedAnneling.Model.Anneling.SimulatedAnneling s in simulations)
+            {
+
+                /*Thread t = new Thread(s.simulate);
+                t.Start();*/
+                s.simulate();
+            }
+        }
+        public void simulacion(int cities)
+        {
+            tourManager.setCitiesSimulation(cities);
+            string[] lines = { "si", "no" };
+            File.AppendAllLines("WriteFile.txt", lines);
+            double i = 0.5;
+            double f = 0.7;
+            double ri = 27.001096637526665;
+            double rf = 104.8508596852175;
+
+            double respuesta = binario(ri, rf, i, f,0);
+
+            
+
+            /*a.Add("SI");
+            a.Add("NO");*/
+
+         
+
+
+            
+        }
+        private double binario(double ri,double rf, double i,double f, int iteracion)
+        {
+            if(f<i  && iteracion<7)
+            {
+                if (ri < rf)
+                    return f;
+                else
+                    return i;
+            }
+
+            double average = (i + f) / 2;
+
+            double value = calculatevalue(average);
+
+            if (ri > rf)
+            {
+                return binario(ri, value, i, average,iteracion++);
+            }
+            else
+            {
+                return binario(value, rf, average, f,iteracion++);
+            }
+
+
+            
+
+            
+        }
+
+        private double calculatevalue(double cooling)
+        {
+            DateTime inicio = DateTime.Now;
+            SimulatedAnneling.Model.Anneling.SimulatedAnneling s = new SimulatedAnneling.Model.Anneling.SimulatedAnneling(3, cooling, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS, tourManager);
+            double v = s.simulate().calculateCostFunction();
+            DateTime end = DateTime.Now;
+            TimeSpan t = end - inicio;
+
+            int seconds = t.Seconds + t.Minutes * 60 + t.Hours * 60 * 60;
+
+            string[] lines = { "Seconds: " + seconds + " cost: " + v };
+            File.AppendAllLines("WriteFile.txt", lines);
+
+
+            return v * 0.55 + seconds * 0.45;
+        }
+
+        public ArrayList getSimulations()
+        {
+            return simulations;
+
         }
     }
 }
