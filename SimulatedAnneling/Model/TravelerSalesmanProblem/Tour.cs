@@ -99,5 +99,9 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             }
             return s;
         }
+        public ArrayList getCities()
+        {
+            return cities;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace SimulatedAnneling.View
         /// <summary>
         /// Cantidad máxima de semillas para la simulación
         /// </summary>
-        private const int MAX_SEEDS = 300;
+        private const int MAX_SEEDS = int.MaxValue;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ namespace SimulatedAnneling.View
         {
             InitializeComponent();
             controller = TravelerSalesmanProblem.getInstance();
-            controller.addSimulation(3);
+            /*controller.addSimulation(3);
             controller.simulacion(10);
             //controller.simulate(20);
             /*ArrayList s = controller.getSimulations();
@@ -55,10 +55,8 @@ namespace SimulatedAnneling.View
 
         private void SimulationSettings_Load(object sender, EventArgs e)
         {
-            
+            this.CenterToScreen();
             //TODO REVISAR EL MAXIMO NUMERO DE CIUDADES QUE SE PUEDEN UTILIZAR PARA SIMULAR PARA OCNFIGRAR EL MAXIMO DEL NUMERADO DE CANTIDAD DE CIUDADES
-            enableManualEntry(false);
-            enableChooseCities(false);
             setLabelSizeCities();
             setNumericUpDown();
         }
@@ -73,56 +71,17 @@ namespace SimulatedAnneling.View
             numUpSeeds.Maximum = MAX_SEEDS;
             numUpSeeds.Minimum = MIN_SEEDS;
         }
-        private void lb_seed_values_Click(object sender, EventArgs e)
-        {
-            //TODO hacer botones para que a partir de una misma solucion inicial, con una semilla para dicha solucion inicial, las demás semillan corran a partir de dicha solución inicial y ver cual de todas dá la mejor solución
-            
-        }
-        /// <summary>
-        /// Habilita o deshabilita los controles relacionados a la entrada manual de las semillas
-        /// </summary>
-        /// <param name="val">valor de verdad para habilitar = true o no habilitar = false los controles</param>
-        private void enableManualEntry(Boolean val)
-        {
-            txt_seed_manual_input.Enabled = val;
-            btn_add_seed.Enabled = val;
-            btn_remove_seed.Enabled = val;
-        }
-        /// <summary>
-        /// Habilita o deshabilita los controles relacionados a escoger ciudades para la simulación
-        /// </summary>
-        /// <param name="val">valor de verdad para habilitar = true o no habilitar = false los controles</param>
-        private void enableChooseCities(Boolean val)
-        {
-            txt_search.Enabled = val;
-            btn_find.Enabled = val;
-            cb_cities.Enabled = val;
-            //TODO las ciudades disponibles deben ir desapareciendo conforme se agregan a la simulación
-            ls_cities.Enabled = val;
-            btn_add_city.Enabled = val;
-            ls_selected_cities.Enabled = val;
-            btn_remove_city.Enabled = val;
-        }
-        /// <summary>
-        /// Habilita o deshabilita los controles relacionados a la semilla inicial
-        /// </summary>
-        /// <param name="val">valor de verdad para habilitar = true o no habilitar = false los controles</param>
-        private void enableInitialSeed(Boolean val)
-        {
-            txt_initial_seed.Enabled = val;
-        }
-        private void ckBoxManualInput_CheckedChanged(object sender, EventArgs e)
-        {
-            /*if (ckBoxManualInput)
-                enableManualEntry(true);
-             * */
-        }
         /// <summary>
         /// Escribe la cantidad total de ciudades disponibles
         /// </summary>
         private void setLabelSizeCities()
         {
             lb_size_cities.Text = "/ " + controller.countCities();
+        }
+
+        private void btn_run_Click(object sender, EventArgs e)
+        {
+            int seed = (int) numUpSeeds.Value;
         }
     }
 }

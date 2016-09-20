@@ -464,5 +464,14 @@ namespace SimulatedAnneling.Model.Anneling
 
             return r;
         }
+        /// <summary>
+        /// Obtiene la última solución generada por la simulacion
+        /// </summary>
+        /// <returns></returns>
+        public ISolution getLastSolution()
+        {
+            Batch b = this.getLastBatch();
+            return b.getLastSolution();
+        }
     }
 }

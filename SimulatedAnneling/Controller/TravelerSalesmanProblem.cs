@@ -104,11 +104,10 @@ namespace SimulatedAnneling.Controller
         /// </summary>
         private static TravelerSalesmanProblem singleton = null;
         /// <summary>
-        /// Lista de simulaciones
+        /// Simulación que se está realizando
         /// </summary>
-        private ArrayList simulations;
+        private SimulatedAnneling.Model.Anneling.SimulatedAnneling simulation;
 
-        private ArrayList a = new ArrayList();
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -117,7 +116,6 @@ namespace SimulatedAnneling.Controller
         private TravelerSalesmanProblem()
         {
             tourManager = new TourManager(SERVER, USER_ID, PASSWORD, DATA_BASE);
-            simulations = new ArrayList();
         }
         /// <summary>
         /// Obtiene la instancia única de la clase
@@ -156,23 +154,18 @@ namespace SimulatedAnneling.Controller
             return tourManager.countCities();
         }
 
-        public void addSimulation(int seed)
+        public void simulate(int seed,int cities)
         {
-            SimulatedAnneling.Model.Anneling.SimulatedAnneling s = new SimulatedAnneling.Model.Anneling.SimulatedAnneling(seed, COOLING_FACTOR, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS,tourManager);
-            simulations.Add(s);
-        }
-
-        public void simulate(int cities)
-        {
+            simulation = new Model.Anneling.SimulatedAnneling(seed, COOLING_FACTOR, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS, tourManager);
             tourManager.setCitiesSimulation(cities);
-            foreach( SimulatedAnneling.Model.Anneling.SimulatedAnneling s in simulations)
-            {
-
-                /*Thread t = new Thread(s.simulate);
-                t.Start();*/
-                s.simulate();
-            }
+            Thread thread = new Thread(simulating);
+            thread.Start();
         }
+        private void simulating()
+        {
+            simulation.simulate();
+        }
+        /*
         public void simulacion(int cities)
         {
             tourManager.setCitiesSimulation(cities);
@@ -187,8 +180,6 @@ namespace SimulatedAnneling.Controller
 
             
 
-            /*a.Add("SI");
-            a.Add("NO");*/
 
          
 
@@ -240,10 +231,11 @@ namespace SimulatedAnneling.Controller
 
             return v * 0.55 + seconds * 0.45;
         }
+        */
 
-        public ArrayList getSimulations()
+        public Model.Anneling.SimulatedAnneling getSimulation()
         {
-            return simulations;
+            return simulation;
 
         }
     }

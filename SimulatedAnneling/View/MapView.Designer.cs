@@ -42,12 +42,22 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.lb_name = new System.Windows.Forms.Label();
             this.btn_simulate = new System.Windows.Forms.Button();
+            this.gboxSolution = new System.Windows.Forms.GroupBox();
+            this.btnChart = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lbTime = new System.Windows.Forms.Label();
+            this.txtCostFunction = new System.Windows.Forms.TextBox();
+            this.lbCostFunction = new System.Windows.Forms.Label();
+            this.lbSolutionCities = new System.Windows.Forms.Label();
+            this.lsBoxCities = new System.Windows.Forms.ListBox();
             this.grBxInformation.SuspendLayout();
+            this.gboxSolution.SuspendLayout();
             this.SuspendLayout();
             // 
             // grBxInformation
             // 
             this.grBxInformation.Controls.Add(this.lb_connected_cities);
+            this.grBxInformation.Controls.Add(this.btn_simulate);
             this.grBxInformation.Controls.Add(this.lsbox_connectedCities);
             this.grBxInformation.Controls.Add(this.txt_longitude);
             this.grBxInformation.Controls.Add(this.txt_latitude);
@@ -62,7 +72,7 @@
             this.grBxInformation.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grBxInformation.Location = new System.Drawing.Point(726, 26);
             this.grBxInformation.Name = "grBxInformation";
-            this.grBxInformation.Size = new System.Drawing.Size(339, 624);
+            this.grBxInformation.Size = new System.Drawing.Size(339, 807);
             this.grBxInformation.TabIndex = 1;
             this.grBxInformation.TabStop = false;
             this.grBxInformation.Text = "Information";
@@ -84,7 +94,7 @@
             this.lsbox_connectedCities.ItemHeight = 22;
             this.lsbox_connectedCities.Location = new System.Drawing.Point(20, 343);
             this.lsbox_connectedCities.Name = "lsbox_connectedCities";
-            this.lsbox_connectedCities.Size = new System.Drawing.Size(294, 246);
+            this.lsbox_connectedCities.Size = new System.Drawing.Size(294, 400);
             this.lsbox_connectedCities.TabIndex = 10;
             this.lsbox_connectedCities.SelectedIndexChanged += new System.EventHandler(this.lsbox_connectedCities_SelectedIndexChanged);
             // 
@@ -185,7 +195,8 @@
             // 
             // btn_simulate
             // 
-            this.btn_simulate.Location = new System.Drawing.Point(962, 656);
+            this.btn_simulate.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_simulate.Location = new System.Drawing.Point(211, 763);
             this.btn_simulate.Name = "btn_simulate";
             this.btn_simulate.Size = new System.Drawing.Size(103, 38);
             this.btn_simulate.TabIndex = 2;
@@ -193,12 +204,99 @@
             this.btn_simulate.UseVisualStyleBackColor = true;
             this.btn_simulate.Click += new System.EventHandler(this.btn_simulate_Click);
             // 
+            // gboxSolution
+            // 
+            this.gboxSolution.Controls.Add(this.btnChart);
+            this.gboxSolution.Controls.Add(this.textBox1);
+            this.gboxSolution.Controls.Add(this.lbTime);
+            this.gboxSolution.Controls.Add(this.txtCostFunction);
+            this.gboxSolution.Controls.Add(this.lbCostFunction);
+            this.gboxSolution.Controls.Add(this.lbSolutionCities);
+            this.gboxSolution.Controls.Add(this.lsBoxCities);
+            this.gboxSolution.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gboxSolution.Location = new System.Drawing.Point(27, 628);
+            this.gboxSolution.Name = "gboxSolution";
+            this.gboxSolution.Size = new System.Drawing.Size(679, 205);
+            this.gboxSolution.TabIndex = 8;
+            this.gboxSolution.TabStop = false;
+            this.gboxSolution.Text = "Solution information";
+            // 
+            // btnChart
+            // 
+            this.btnChart.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChart.Location = new System.Drawing.Point(533, 161);
+            this.btnChart.Name = "btnChart";
+            this.btnChart.Size = new System.Drawing.Size(113, 35);
+            this.btnChart.TabIndex = 6;
+            this.btnChart.Text = "See Charts";
+            this.btnChart.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.textBox1.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(401, 104);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(245, 27);
+            this.textBox1.TabIndex = 5;
+            // 
+            // lbTime
+            // 
+            this.lbTime.AutoSize = true;
+            this.lbTime.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTime.Location = new System.Drawing.Point(305, 109);
+            this.lbTime.Name = "lbTime";
+            this.lbTime.Size = new System.Drawing.Size(43, 22);
+            this.lbTime.TabIndex = 4;
+            this.lbTime.Text = "Time";
+            // 
+            // txtCostFunction
+            // 
+            this.txtCostFunction.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.txtCostFunction.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCostFunction.Location = new System.Drawing.Point(401, 62);
+            this.txtCostFunction.Name = "txtCostFunction";
+            this.txtCostFunction.ReadOnly = true;
+            this.txtCostFunction.Size = new System.Drawing.Size(245, 27);
+            this.txtCostFunction.TabIndex = 3;
+            // 
+            // lbCostFunction
+            // 
+            this.lbCostFunction.AutoSize = true;
+            this.lbCostFunction.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbCostFunction.Location = new System.Drawing.Point(305, 65);
+            this.lbCostFunction.Name = "lbCostFunction";
+            this.lbCostFunction.Size = new System.Drawing.Size(90, 22);
+            this.lbCostFunction.TabIndex = 2;
+            this.lbCostFunction.Text = "Cost function";
+            // 
+            // lbSolutionCities
+            // 
+            this.lbSolutionCities.AutoSize = true;
+            this.lbSolutionCities.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSolutionCities.Location = new System.Drawing.Point(23, 33);
+            this.lbSolutionCities.Name = "lbSolutionCities";
+            this.lbSolutionCities.Size = new System.Drawing.Size(49, 22);
+            this.lbSolutionCities.TabIndex = 1;
+            this.lbSolutionCities.Text = "Cities";
+            // 
+            // lsBoxCities
+            // 
+            this.lsBoxCities.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lsBoxCities.FormattingEnabled = true;
+            this.lsBoxCities.ItemHeight = 22;
+            this.lsBoxCities.Location = new System.Drawing.Point(26, 62);
+            this.lsBoxCities.Name = "lsBoxCities";
+            this.lsBoxCities.Size = new System.Drawing.Size(240, 114);
+            this.lsBoxCities.TabIndex = 0;
+            // 
             // MapView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1089, 706);
-            this.Controls.Add(this.btn_simulate);
+            this.ClientSize = new System.Drawing.Size(1094, 865);
+            this.Controls.Add(this.gboxSolution);
             this.Controls.Add(this.grBxInformation);
             this.Name = "MapView";
             this.Text = "Traveler salesman problem";
@@ -206,6 +304,8 @@
             this.Load += new System.EventHandler(this.MapView_Load);
             this.grBxInformation.ResumeLayout(false);
             this.grBxInformation.PerformLayout();
+            this.gboxSolution.ResumeLayout(false);
+            this.gboxSolution.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -225,5 +325,13 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lb_name;
         private System.Windows.Forms.Button btn_simulate;
+        private System.Windows.Forms.GroupBox gboxSolution;
+        private System.Windows.Forms.Button btnChart;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label lbTime;
+        private System.Windows.Forms.TextBox txtCostFunction;
+        private System.Windows.Forms.Label lbCostFunction;
+        private System.Windows.Forms.Label lbSolutionCities;
+        private System.Windows.Forms.ListBox lsBoxCities;
     }
 }

@@ -16,11 +16,27 @@ using SimulatedAnneling.Controller;
 using System.Collections;
 using SimulatedAnneling.Model.TravelerSalesmanProblem;
 using System.Threading;
+using SimulatedAnneling.ObserverPattern;
+using System.Windows.Media.Animation;
 
 namespace SimulatedAnneling.View
 {
-    public partial class MapView : Form
+    public partial class MapView : Form, ObserverPattern.IObserver
     {
+        /**-------------------------------------------------------------------------------------------
+         * Constantes
+         *--------------------------------------------------------------------------------------------
+         **/
+
+        ///<summary>
+        ///Modo donde el mapa se muestra con la información de todo el mundo
+        ///</summary>
+        public const int MODE_WORLD = 1;
+        /// <summary>
+        /// Modo para que el mapa muestre una solución
+        /// </summary>
+        public const int MODE_SOLUTION = 2;
+
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -51,10 +67,35 @@ namespace SimulatedAnneling.View
         /// Ultimo marcador seleccionado
         /// </summary>
         private GMapMarkerGoogleRed lastMarker;
+        /// <summary>
+        /// Modo de operación del mapa
+        /// </summary>
+        private int mode;
 
-        public MapView()
+        public MapView(int nMode)
         {
+            mode = nMode;
             InitializeComponent();
+            this.CenterToScreen();
+            
+        }
+        /// <summary>
+        /// Configure the map accoding to the assigned task
+        /// </summary>
+        private void setMode()
+        {
+            if (mode == MODE_WORLD)
+            {
+                //Dibuja ciudades
+                drawCities(controller.getCities());
+                gboxSolution.Visible = false;
+            }
+            else if (mode == MODE_SOLUTION)
+            {
+                btn_simulate.Visible = false;
+            }
+            else
+                throw new Exception("Map needs a valid mode");
         }
         private void MapView_Load(object sender, EventArgs e)
         {
@@ -62,15 +103,12 @@ namespace SimulatedAnneling.View
             configurateMapControl();
             //Obtiene instancia controlador
             controller = TravelerSalesmanProblem.getInstance();
-            //Dibuja ciudades
-            drawCities();
-           
-
+            setMode();
             
         }
-        private void drawCities()
+        private void drawCities(ArrayList cities)
         {
-            ArrayList cities = controller.getCities();
+            
             foreach(City c in cities)
             {
                 marker = new GMapMarkerGoogleRed(new PointLatLng(c.getLatitude(), c.getLongitude()));
@@ -247,6 +285,11 @@ namespace SimulatedAnneling.View
         private void btn_simulate_Click(object sender, EventArgs e)
         {
 
+            //this.Dispose();
+            //settings.CenterToScreen();
+            SimulationSettings settings = new SimulationSettings();
+            settings.Show();
+            
         }
 
         private void MapView_FormClosed(object sender, FormClosedEventArgs e)
@@ -261,6 +304,17 @@ namespace SimulatedAnneling.View
             {
                 gmap.Position = new PointLatLng(c.getLatitude(), c.getLongitude());
             }
+        }
+
+        protected override void update(String command)
+        {
+            Tour tour = (Tour) controller.getSimulation().getLastSolution();
+            drawCities(tour.getCities());
+            txtCostFunction.Text = ""+tour.calculateCostFunction();
+        }
+        public void startClock()
+        {
+
         }
 
     }
