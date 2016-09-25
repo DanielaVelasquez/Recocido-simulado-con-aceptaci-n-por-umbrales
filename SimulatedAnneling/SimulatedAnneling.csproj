@@ -69,7 +69,7 @@
     <Compile Include="Model\Anneling\IManager.cs" />
     <Compile Include="Model\Anneling\ISolution.cs" />
     <Compile Include="Model\Anneling\Batch.cs" />
-    <Compile Include="Model\Anneling\SimulatedAnneling.cs" />
+    <Compile Include="Model\Anneling\Simulation.cs" />
     <Compile Include="Model\TravelerSalesmanProblem\City.cs" />
     <Compile Include="Model\TravelerSalesmanProblem\Tour.cs" />
     <Compile Include="Model\TravelerSalesmanProblem\TourManager.cs" />

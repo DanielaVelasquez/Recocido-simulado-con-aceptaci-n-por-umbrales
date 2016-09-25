@@ -37,46 +37,27 @@ namespace SimulatedAnneling.Model.Anneling
         /// Ultima solución aceptada por el lote
         /// </summary>
         private ISolution lastSolution;
+        /// <summary>
+        /// Tamaño de un lote
+        /// </summary>
+        private int L;
+        /// <summary>
+        /// Máximo número de iteraciones de un lote
+        /// </summary>
+        private int MAX_ITERATIONS;
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
          *--------------------------------------------------------------------------------------------
          **/
-        /// <summary>
-        /// Constructor de un lote
-        /// </summary>
-        /// <param name="nTemperature">Temperatura a la cual se está generando el lote</param>
-        public Batch(double nTemperature)
+        
+        public Batch(int NBACTH_SIZE, int NMAX_ITERATIONS)
         {
-            temperature = nTemperature;
-            finished = false;
+            L = NBACTH_SIZE;
+            MAX_ITERATIONS = NMAX_ITERATIONS;
             solutions = new ArrayList();
-            best = null;
         }
-        /// <summary>
-        /// Adiciona una nueva solución al lote
-        /// </summary>
-        /// <param name="solution">Nueva solución del lote</param>
-        public void addSolution(ISolution solution)
-        {
-            solutions.Add(solution);
-        }
-        /// <summary>
-        /// Cambia el valor de verdad que determina si el lote termino o no
-        /// </summary>
-        /// <param name="nFinished">Nuevo valor determina si el lote termino o no</param>
-        public void setIsFinished(Boolean nFinished)
-        {
-            finished = nFinished;
-        }
-        /// <summary>
-        /// Cambia la mejor solución del lote
-        /// </summary>
-        /// <param name="nBest"></param>
-        public void setBest(ISolution nBest)
-        {
-            best = nBest;
-        }
+        
         /// <summary>
         /// Determina si el lote terminó
         /// </summary>
@@ -103,15 +84,59 @@ namespace SimulatedAnneling.Model.Anneling
             r = r + "\nBEST: " + best.ToString();
             return r;
         }
-        public void setLastSolution(ISolution s)
-        {
-            lastSolution = s;
-            if (lastSolution.calculateCostFunction() < best.calculateCostFunction())
-                best = lastSolution;
-        }
         public ISolution getLastSolution()
         {
             return lastSolution;
+        }
+        /// <summary>
+        /// Calcula un lote a partir de una solucion inicial y una temperatura dada
+        /// </summary>
+        /// <param name="T">Temperatura en la que se encuentra la simulación</param>
+        /// <param name="solution">solucion inicial</param>
+        /// <param name="random">objeto permite aleatoriedad</param>
+        /// <returns></returns>
+        public double calculate_batch(double T,ISolution solution,Random random)
+        {
+            this.temperature = T;
+
+            ISolution s = (ISolution)solution.Clone();
+
+            best = s;
+            //Cantidad de soluciones aceptadas
+            int c = 0;
+            double r = 0;
+
+            int iterations = 0;
+
+            finished = false;
+
+            while(c<L && iterations<MAX_ITERATIONS)
+            {
+                ISolution s1 = s.getNeighbour(random);
+
+                if (s1.calculateCostFunction() < best.calculateCostFunction())
+                    best = s1;
+
+                if(s1.calculateCostFunction() <= (s.calculateCostFunction() + T))
+                {
+                    s = s1;
+                    c = c + 1;
+                    r = r + s1.calculateCostFunction();
+
+                    //Guarda todas las soluciones generadas por el lote
+                    solutions.Add(s1);
+                }
+                iterations = iterations + 1;
+            }
+            finished = c == L;
+            //Determina si el lote terminó
+            /*if (c==L)
+                finished = false;
+            else
+                finished = true;
+            */
+            lastSolution = s;
+            return r / (double)L;
         }
     }
 }

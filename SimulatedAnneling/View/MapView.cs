@@ -17,7 +17,7 @@ using System.Collections;
 using SimulatedAnneling.Model.TravelerSalesmanProblem;
 using System.Threading;
 using SimulatedAnneling.ObserverPattern;
-using System.Windows.Media.Animation;
+using SimulatedAnneling.Model.Anneling;
 
 namespace SimulatedAnneling.View
 {
@@ -71,14 +71,24 @@ namespace SimulatedAnneling.View
         /// Modo de operación del mapa
         /// </summary>
         private int mode;
+        
 
         public MapView(int nMode)
         {
             mode = nMode;
             InitializeComponent();
             this.CenterToScreen();
-            
+            this.Show();
         }
+        private void MapView_Load(object sender, EventArgs e)
+        {
+            configurateMapControl();
+            //Obtiene instancia controlador
+            controller = TravelerSalesmanProblem.getInstance();
+            setMode();
+
+        }
+
         /// <summary>
         /// Configure the map accoding to the assigned task
         /// </summary>
@@ -93,22 +103,92 @@ namespace SimulatedAnneling.View
             else if (mode == MODE_SOLUTION)
             {
                 btn_simulate.Visible = false;
+                Simulation s = controller.getSimulation();
+                if (s != null)
+                {
+                    while(s.isSimulating())
+                    {
+
+                    }
+                    draw_simulation(s);
+                }
+                else
+                    throw new Exception("Map needs a simulation to show");
             }
             else
                 throw new Exception("Map needs a valid mode");
         }
-        private void MapView_Load(object sender, EventArgs e)
+        private void draw_connections(ArrayList cities)
         {
-            Console.WriteLine("inicie");
-            configurateMapControl();
-            //Obtiene instancia controlador
-            controller = TravelerSalesmanProblem.getInstance();
-            setMode();
+            routesOverlay.Routes.Clear();
+
             
+            for(int i = 1; i<cities.Count;i++)
+            {
+                List<PointLatLng> ls = new List<PointLatLng>();
+
+                City last = (City)cities[i - 1];
+                City actual = (City)cities[i];
+                ls.Add(new PointLatLng(last.getLatitude(), last.getLongitude()));
+                ls.Add(new PointLatLng(actual.getLatitude(), actual.getLongitude()));
+
+
+                GMapRoute r = new GMapRoute(ls, "routes_solution");
+                r.Stroke.Color = Color.Black;
+                r.Stroke.Width = 2;
+                routesOverlay.Routes.Add(r);
+            }
+
         }
+        private void draw_simulation(Simulation s)
+        {
+            draw_tour((Tour)s.getBest());
+            setTime(s.getTime());
+        }
+        private void draw_tour(Tour t)
+        {
+            drawCities(t.getCities());
+            draw_connections(t.getCities());
+            configure_cities_solution(t.getCities());
+            setCostFunction(t.calculateCostFunction());
+        }
+        private void setTime(String time)
+        {
+            txtTime.Text = time;
+        }
+        /// <summary>
+        /// Muestra los resultados de la simulación en pantalla
+        /// </summary>
+        /*public void configure_simulation()
+        {
+            controller.simulate();
+            Thread.Sleep(5000);
+            Simulation s = controller.getSimulation();
+            while(s.isSimulating())
+            {
+               
+                Tour tour = (Tour) s.getLastSolution();
+
+                drawCities(tour.getCities());
+                draw_connections(tour.getCities());
+                configure_cities_solution(tour.getCities());
+                setCostFunction(tour.calculateCostFunction());
+                Console.WriteLine("********************************cargue y voy a esperar");
+                //Mientras esté simulando cada 5 segundos actualizará la pantalla
+                Thread.Sleep(5000);
+                Console.WriteLine("********************************voy a revisar otra vez");
+            }
+            Console.WriteLine("ACABE");
+        }*/
+        private void configure_cities_solution(ArrayList c)
+        {
+            lsBoxCities.Items.Clear();
+            lsBoxCities.Items.AddRange(c.ToArray());
+        }
+        
         private void drawCities(ArrayList cities)
         {
-            
+            overlayOne.Markers.Clear();
             foreach(City c in cities)
             {
                 marker = new GMapMarkerGoogleRed(new PointLatLng(c.getLatitude(), c.getLongitude()));
@@ -166,20 +246,25 @@ namespace SimulatedAnneling.View
         }
         private void markerClick(object sender, EventArgs e)
         {
-            //if(((GMapControl)sender).IsMouseOverMarker)
-            marker = (GMapMarkerGoogleRed)sender;
-            City c = controller.findCityBy(marker.Position.Lat, marker.Position.Lng);
-            if(c!=null)
-            {
-                setName(c.getName());
-                setCountry(c.getCountry());
-                setPopulation(c.getPopulation());
-                setLatitude(c.getLatitude());
-                setLongitude(c.getLongitude());
-                setConnectedCities(c.getAdjacentCities());
-                showConnections();
-               
-            }
+            
+                //if(((GMapControl)sender).IsMouseOverMarker)
+                marker = (GMapMarkerGoogleRed)sender;
+                City c = controller.findCityBy(marker.Position.Lat, marker.Position.Lng);
+                if (c != null)
+                {
+                    setName(c.getName());
+                    setCountry(c.getCountry());
+                    setPopulation(c.getPopulation());
+                    setLatitude(c.getLatitude());
+                    setLongitude(c.getLongitude());
+                    setConnectedCities(c.getAdjacentCities());
+
+                    if(mode == MODE_WORLD)
+                        showConnections();
+
+                }
+            
+           
         }
         /// <summary>
         /// Muestras las conexiones de una ciudad
@@ -289,6 +374,7 @@ namespace SimulatedAnneling.View
             //settings.CenterToScreen();
             SimulationSettings settings = new SimulationSettings();
             settings.Show();
+            this.Hide();
             
         }
 
@@ -305,17 +391,28 @@ namespace SimulatedAnneling.View
                 gmap.Position = new PointLatLng(c.getLatitude(), c.getLongitude());
             }
         }
-
-        protected override void update(String command)
+        
+        public void update(String command)
         {
-            Tour tour = (Tour) controller.getSimulation().getLastSolution();
+            Tour tour = (Tour)controller.getSimulation().getSolution();
             drawCities(tour.getCities());
-            txtCostFunction.Text = ""+tour.calculateCostFunction();
+            //setCostFunction (""+ tour.calculateCostFunction());
         }
-        public void startClock()
+        private void setCostFunction(double t)
         {
-
+            txtCostFunction.Text = ""+t;
         }
+
+        private void lsBoxCities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            City c = (City)lsBoxCities.SelectedItem;
+            if (c != null)
+            {
+                gmap.Position = new PointLatLng(c.getLatitude(), c.getLongitude());
+            }
+        }
+        
+
 
     }
 }

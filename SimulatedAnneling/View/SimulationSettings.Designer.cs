@@ -35,6 +35,7 @@
             this.numUpNumberCities = new System.Windows.Forms.NumericUpDown();
             this.btn_run = new System.Windows.Forms.Button();
             this.lb_size_cities = new System.Windows.Forms.Label();
+            this.lb_message_simulating = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numUpSeeds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpNumberCities)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +67,7 @@
             this.numUpSeeds.Size = new System.Drawing.Size(79, 22);
             this.numUpSeeds.TabIndex = 1;
             this.numUpSeeds.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -102,6 +103,12 @@
             this.numUpNumberCities.Name = "numUpNumberCities";
             this.numUpNumberCities.Size = new System.Drawing.Size(77, 27);
             this.numUpNumberCities.TabIndex = 3;
+            this.numUpNumberCities.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numUpNumberCities.ValueChanged += new System.EventHandler(this.numUpNumberCities_ValueChanged);
             // 
             // btn_run
             // 
@@ -123,11 +130,21 @@
             this.lb_size_cities.TabIndex = 6;
             this.lb_size_cities.Text = "label2";
             // 
+            // lb_message_simulating
+            // 
+            this.lb_message_simulating.AutoSize = true;
+            this.lb_message_simulating.Location = new System.Drawing.Point(232, 132);
+            this.lb_message_simulating.Name = "lb_message_simulating";
+            this.lb_message_simulating.Size = new System.Drawing.Size(92, 17);
+            this.lb_message_simulating.TabIndex = 7;
+            this.lb_message_simulating.Text = "AQUI ESTOY";
+            // 
             // SimulationSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 161);
+            this.ClientSize = new System.Drawing.Size(553, 168);
+            this.Controls.Add(this.lb_message_simulating);
             this.Controls.Add(this.numUpSeeds);
             this.Controls.Add(this.lb_size_cities);
             this.Controls.Add(this.lb_seeds);
@@ -154,5 +171,6 @@
         private System.Windows.Forms.NumericUpDown numUpNumberCities;
         private System.Windows.Forms.Button btn_run;
         private System.Windows.Forms.Label lb_size_cities;
+        private System.Windows.Forms.Label lb_message_simulating;
     }
 }

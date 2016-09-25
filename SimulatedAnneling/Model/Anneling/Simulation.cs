@@ -11,7 +11,7 @@ namespace SimulatedAnneling.Model.Anneling
     /// <summary>
     /// Modela recocido simulado a partir de un problema
     /// </summary>
-    public class SimulatedAnneling : Observable
+    public class Simulation : Observable
     {
         
         /**-------------------------------------------------------------------------------------------
@@ -62,12 +62,12 @@ namespace SimulatedAnneling.Model.Anneling
         /// <summary>
         /// Cero virtual para el equilibrio témico
         /// </summary>
-        private double EP ;
+        private double EP_INITIAL_TEMPERATURE ;
 
         /// <summary>
         /// Cero virtual para la temperatura
         /// </summary>
-        private double E;
+        private double E_SIMULATED_ANNELING;
 
         /// <summary>
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
@@ -80,23 +80,40 @@ namespace SimulatedAnneling.Model.Anneling
         /// busqueda binaria, al preguntar por la diferencia
         /// de sus temperaturas
         /// </summary>
-        private double ET;
+        private double ET_BINARY_SEARCH;
 
         /// <summary>
         /// Cero virtual para algoritmo de busqueda binaria
         /// con base en el promedio de los aceptados
         /// </summary>
-        private double EACCEPTED;
+        private double EP_BINARY_SEARCH;
+        /// <summary>
+        /// Cero virtual para el algoritmo de recocido simulado
+        /// </summary>
+        private double EP_SIMULATED_ANNELING;
+
         /// <summary>
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
         /// </summary>
-        private int N;
+        private int N_PERCENTAGE_ACCEPTED;
         /// <summary>
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
         /// </summary>
         private double ACCEPTED_SOLUTIONS;
+        /// <summary>
+        /// Variable determina si se está simulando
+        /// </summary>
+        private Boolean simulating;
+        /// <summary>
+        /// Solucion actual del recocido simulado
+        /// </summary>
+        private ISolution solution;
+        /// <summary>
+        /// Tiempo tomo a la simulación encontrar una solución
+        /// </summary>
+        private TimeSpan time;
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
@@ -106,26 +123,28 @@ namespace SimulatedAnneling.Model.Anneling
         /// Constructor para el recocido simulado
         /// </summary>
         /// <param name="nSeed">Valor de la semilla para obtener la aletoridad</param>
-        public SimulatedAnneling(int nSeed, double COOLING_FACTOR, int BATCH_SIZE, int MAX_ITERATION_BATCH
+        public Simulation(int nSeed, double COOLING_FACTOR, int BATCH_SIZE, int MAX_ITERATION_BATCH
                                  , double EP, double E, int INITIAL_TEMPERATURE, double ET, double EACCEPTED
-                                 , int N, double ACCEPTED_SOLUTIONS,IManager m)
+                                 , int N, double ACCEPTED_SOLUTIONS, double EP_SIMULATED_ANNELING,IManager m)
         {
             this.ACCEPTED_SOLUTIONS = ACCEPTED_SOLUTIONS;
-            this.N = N;
+            this.N_PERCENTAGE_ACCEPTED = N;
             this.INITIAL_TEMPERATURE = INITIAL_TEMPERATURE;
-            this.EACCEPTED = EACCEPTED;
-            this.ET = ET;
-            this.E = E;
-            this.EP = EP;
+            this.EP_BINARY_SEARCH = EACCEPTED;
+            this.ET_BINARY_SEARCH = ET;
+            this.E_SIMULATED_ANNELING = E;
+            this.EP_INITIAL_TEMPERATURE = EP;
             this.COOLING_FACTOR = COOLING_FACTOR;
             this.BATCH_SIZE = BATCH_SIZE;
             this.MAX_ITERATION_BATCH = MAX_ITERATION_BATCH;
+            this.EP_SIMULATED_ANNELING = EP_SIMULATED_ANNELING;
             seed = nSeed;
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
             bestSolution = null;
             batches = new ArrayList();
             manager = m;
+            simulating = false;
         }
         /// <summary>
         /// Realiza la simulación del recocido y retorna la mejor solución encontrada
@@ -133,67 +152,40 @@ namespace SimulatedAnneling.Model.Anneling
         /// <returns>Mejor solución encontrada</returns>
         public ISolution simulate()
         {
-            //DateTime inicio = DateTime.Now;
+            simulating = true;
+            DateTime inicio = DateTime.Now;
+
             //Genera una solución inicial
-            ISolution initialSolution = manager.getRamdomSolution(random);
-            double a = initialSolution.calculateCostFunction();
+            ISolution initial_solution = manager.getRamdomSolution(random);
+            solution = initial_solution;
+
             //Calcula la temperatura inicial del problema 
-            //DateTime inicio_temp = DateTime.Now;
-            temperature = initialTemperature(initialSolution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
-            //DateTime end_temp = DateTime.Now;
-            //Console.WriteLine((end_temp - inicio_temp).ToString());
+             temperature = initial_temperature(initial_solution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
+            
             //Se inicia de nuevo el random
             random = new Random(seed);
             //Genera una solución inicial
-            initialSolution = manager.getRamdomSolution(random);
-            bestSolution = initialSolution;
-            simulatedAnneling(initialSolution);
-            //DateTime end = DateTime.Now;
-            //TimeSpan t = end - inicio;
-            //Console.WriteLine("Acabe "+t.ToString());
+            initial_solution = manager.getRamdomSolution(random);
+
+            bestSolution = initial_solution;
+            solution = initial_solution;
+            simulated_anneling();
+
+            DateTime end = DateTime.Now;
+            time = end - inicio;
+
+            simulating = false;
             return bestSolution;
 
         }
-        /// <summary>
-        /// Calcula un lote de soluciones dentro del umbral determinado por la temperatura
-        /// </summary>
-        /// <param name="solution">solución a partir de la cual se va a generar el lote</param>
-        /// <returns>Promedio de las soluciones aceptadas</returns>
-        private double calculateBatch(ISolution solution)
+        public ISolution getSolution()
         {
-            //Cantidad de vecinos aceptados
-            int neighbours_accepted = 0;
-            //Suma costos de función de todos los vecinos aceptados
-            double costs_functions = 0;
-            //Cantidad de iteraciones
-            int iterations = 0;
-            //Creación de un lote
-            Batch batch = new Batch(temperature);
-            
-            //Se asume como mejor solución a la solución inicial dada
-            batch.setBest(solution);
-            while(neighbours_accepted < BATCH_SIZE && iterations < MAX_ITERATION_BATCH)
-            {
-                ISolution neighbour = solution.getNeighbour(random);
-                if (isAccepted(neighbour,solution,temperature))
-                {
-                    solution = neighbour;
-                    batch.setLastSolution(solution);
-                    neighbours_accepted = neighbours_accepted + 1;
-                    costs_functions = costs_functions + neighbour.calculateCostFunction();
-                    //Adiciona el vecino aceptado
-                    batch.addSolution(neighbour); 
-                }
-                
-                iterations = iterations + 1;
-            }
-            //Determina si el lote acabó 
-            batch.setIsFinished(neighbours_accepted <= BATCH_SIZE);
-            //Adiciona el lote al conjunto de lotes del problema
-            batches.Add(batch);
-            //Se guarda la mejor solución del lote
-            batch.setBest(solution);
-            return costs_functions / (double) BATCH_SIZE;
+            return solution;
+        }
+        public void setSolution(ISolution s)
+        {
+            solution = s;
+            this.notify(null);
         }
         /// <summary>
         /// Determina si un vecino es aceptado a partir de la temperatura y la solución 
@@ -215,23 +207,38 @@ namespace SimulatedAnneling.Model.Anneling
         /// el equilibrio térmico
         /// </summary>
         /// <param name="solution">solución inicial para la simulación</param>
-        private void simulatedAnneling(ISolution solution)
+        private void simulated_anneling()
         {
             double p = double.MaxValue;
+
             //Determina si aún se están generando soluciones en un lote
             Boolean isWorking = true;
-            while(temperature>E && isWorking)
+            while(temperature>E_SIMULATED_ANNELING && isWorking)
             {
                 double p1 = 0;
-                while(Math.Abs(p-p1)>EP && isWorking)
+                while(Math.Abs(p-p1)>EP_SIMULATED_ANNELING && isWorking)
                 {
+                    p1 = p;
+
+                    Batch batch = new Batch(BATCH_SIZE, MAX_ITERATION_BATCH);
+                    batches.Add(batch);
+
+                    p = batch.calculate_batch(temperature, solution, random);
+                    solution = batch.getLastSolution();
+
+                    isWorking = batch.isFinished();
+
+                    //Revisa si la mejor solución del batch es mejor que la solucion que se tiene como mejor
+                    if (batch.getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
+                        bestSolution = batch.getBest();
+                    /*
                     double temp = calculateBatch(solution);
                     //Si el último lote terminó
                     if (didLastBatchEnd())
                     {
                         p1 = p;
                         p = temp;
-                        solution = getLastBatch().getLastSolution();
+                        setSolution(getLastBatch().getLastSolution());
 
                         //Ver si la mejor solucion del lote es la mejor solucion que se ha generado
                         if (getLastBatch().getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
@@ -241,9 +248,10 @@ namespace SimulatedAnneling.Model.Anneling
                         //Ya no se están produciendo nuevas soluciones, se para el 
                         //algoritmo
                         isWorking = false;
+                    */
 
                 }
-                updateTemperature();
+                temperature = COOLING_FACTOR * temperature;
             }
         }
         /// <summary>
@@ -259,71 +267,62 @@ namespace SimulatedAnneling.Model.Anneling
             return null;
         }
         /// <summary>
-        /// Retora si el ultimo lote se generó completo o no
-        /// </summary>
-        /// <returns>verdadero si el lote se genero completo, falso en caso contrario</returns>
-        private Boolean didLastBatchEnd()
-        {
-            Batch batch = getLastBatch();
-            return batch.isFinished();
-        }
-        /// <summary>
         /// Obtiene una temperatura que aumenta la probabilidad
         /// de desplazarse más rapida y efectivamente por el 
         /// conjunto de soluciones, evitando de igual forma
         /// que sea un enfriamiento demasiado lentp
         /// </summary>
         /// <param name="solution">Solución inicial (aleatoria)</param>
-        /// <param name="temp">temperatura inicial arbitraria </param>
-        /// <param name="p">
+        /// <param name="T">temperatura inicial arbitraria </param>
+        /// <param name="P">
         /// Porcentaje de soluciones que se desea sean aceptadas 
         /// por la temperatura inicial que se quiere encontrar. Aprox
         /// .85<= p <= .95
         /// </param>
         /// <returns></returns>
-        private double initialTemperature(ISolution solution,double temp,double p)
+        private double initial_temperature(ISolution solution, double T, double P)
         {
-            ISolution s = (ISolution) solution.Clone();
+            ISolution s = (ISolution)solution.Clone();
             /**
              * Se calcula el porcentaje de soluciones aceptadas
              * a partir de la temperatura arbitraria que se tomo
             */
-            double p1 = perAceppted(s, temp);
-            double temp1, temp2;
+            double p = percentage_accepted(s, T);
+            double T1, T2;
             /**
              * Si la diferencia entre el porcentaje de soluciones
              * aceptadas a partir de los datos iniciales se acerca
              * bastante al porcentaje de soluciones que se quiere
-             * acepte la temperatura inicial es decir p1 sea casi p 
+             * acepte la temperatura inicial es decir p sea casi p 
              * se dice que la temperatura dada es un temperatura
              * adecuada para iniciar el algoritmo
              **/
-            if (Math.Abs(p - p1) <= EP)
-                return temp;
+            if (Math.Abs(P - p) <= EP_INITIAL_TEMPERATURE)
+                return T;
             /**
-             * Si el porcentaje de soluciones aceptadas (p1) es menor
-             * al porcentaje p que se desea tener, se incrementa la 
+             * Si el porcentaje de soluciones aceptadas (p) es menor
+             * al porcentaje P que se desea tener, se incrementa la 
              * temperatura al doble
-             **/ 
-            if(p1<p)
+             **/
+            if (p < P)
             {
                 /**
-                 * Mientras el porcentaje de soluciones aceptas p1 siga
+                 * Mientras el porcentaje de soluciones aceptas p siga
                  * siendo menor que el porcentaje que se desea se aumenta
                  * la temperatura y se evalua hasta que el porcentaje de 
                  * aceptados se mayor que el que se desea
                  **/
-                while(p1<p)
+                while (p < P)
                 {
-                    temp = 2 * temp;
-                    p1 = perAceppted(s, temp);
+                    T = 2 * T;
+                    p = percentage_accepted(s, T);
                 }
                 /**
                  * --------|------------|-----------
                  *       temp/2        temp
                  **/
-                temp1 = temp / 2;
-                temp2 = temp;
+                T1 = T / 2;
+                T2 = T;
             }
             else
             {
@@ -332,115 +331,107 @@ namespace SimulatedAnneling.Model.Anneling
                  * el porcentaje de aceptados que se desea, la temperatura 
                  * se disminuye y se evalua hasta que el porcentaje de aceptados
                  * sea el apropiado
-                 **/ 
-                while(p1>p)
+                 **/
+                while (p > P)
                 {
-                    temp = temp / 2;
-                    p1 = perAceppted(s, temp);
+                    T = T / 2;
+                    p = percentage_accepted(s, T);
                 }
                 /**
                  * --------|------------|-----------
                  *       temp         2 * temp
                  **/
-                temp1 = temp;
-                temp2 = 2 * temp;
+                T1 = T;
+                T2 = 2 * T;
             }
             /**
-             * Realiza una busqueda binaria entre temp1 y temp2
+             * Realiza una busqueda binaria entre T1 y T2
              * --------|----------|----------|-----------
-             *       temp1        ?        temp2 
+             *       T1        ?        T2 
              * con el objetivo de encontrar un valor intermedio 
              * entre estos que se acerque más al porcentaje de 
              * aceptados que se quiere.
              * temp ha sido cambiado entre 2 incrementandolo y 
              * decrementandolo por eso se hacen las operaciones
-             * respectivas para obtener temp1 o temp2
+             * respectivas para obtener T1 o T2
              **/
-            return binarySearch(s, temp1, temp2, p);
+            return binary_search(s, T1, T2, P);
         }
         /// <summary>
         /// Obtiene el porcentaje de soluciones aceptadas que se generaron
         /// a partir de una solución inicial con una temperatura
         /// </summary>
-        /// <param name="s">solución inicial para recorrer el espacio de soluciones</param>
-        /// <param name="temperature">temperatura inicial permite conocer el porcentaje de soluciones promedio para dicha  temperatura</param>
+        /// <param name="solution">solución inicial para recorrer el espacio de soluciones</param>
+        /// <param name="T">temperatura inicial permite conocer el porcentaje de soluciones promedio para dicha  temperatura</param>
         /// <returns>porcentaje de soluciones aceptadas para una temperatura inicial</returns>
-        private double perAceppted(ISolution s,double temperature)
+        private double percentage_accepted(ISolution solution,double T)
         {
-            ISolution solution = (ISolution)s.Clone();
+            ISolution s = (ISolution)solution.Clone();
             //Cantidad de soluciones aceptadas
-            int accepted = 0;
+            int c = 0;
             //Se generan N vecinos a partir de una solución
-            for(int i = 0; i<N; i++)
+            for(int i = 0; i<N_PERCENTAGE_ACCEPTED; i++)
             {
-                ISolution neighbour = solution.getNeighbour(random);
+                ISolution s1 = s.getNeighbour(random);
                 //Si el vecino es aceptado se incrementa la cantidad
                 //de soluciones aceptadas
-                if (isAccepted(neighbour, solution, temperature))
-                    accepted++;
+                if (isAccepted(s1, solution, T))
+                    c++;
                 //Siempre se intercambia la solución por el vecino para
                 //para explorar más en el conjunto de soluciones
-                solution = neighbour;
+                s = s1;
             }
-            double a = (double) accepted / (double)  N;
+            
             //Retorna cantidad de soluciones aceptadas sobre el numero
             //de soluciones que se generon en total
-            return a;
+            return (double) c / (double)  N_PERCENTAGE_ACCEPTED;
         }
         /// <summary>
         /// Realiza busqueda binaria para encontrar una temperatura media entre 
         /// las dos temperaturas dadas
         /// </summary>
         /// <param name="s">solucion inicial</param>
-        /// <param name="temp1">primera temperatura</param>
-        /// <param name="temp2">segunda temperatura</param>
-        /// <param name="accepted">porcentaje de soluciones que se van a aceptar</param>
+        /// <param name="T1">primera temperatura</param>
+        /// <param name="T2">segunda temperatura</param>
+        /// <param name="P">porcentaje de soluciones que se van a aceptar</param>
         /// <returns></returns>
-        private double binarySearch(ISolution s,double temp1,double temp2,double accepted)
+        private double binary_search(ISolution s, double T1, double T2, double P)
         {
             /**
              * Calcula el valor medio entre las dos temperaturas
              * --------|----------|----------|-------
-             *        temp1     average     tem2
+             *        T1     average     T2
              **/
-            double average = (temp1 + temp2) / 2;
-            
+            double Tm = (T1 + T2) / 2;
+
             //Si la diferencia entre las temperaturas es casi 0, se retorna el promedio de ellas
-            if (temp2 - temp1 < ET)
-                return average;
+            if (T2 - T1 < ET_BINARY_SEARCH)
+                return Tm;
             /**
              * En otro caso:
              * calcula el porcentaje de soluciones aceptadas con el valor medio entre las
              * temperaturas dadas
-             **/ 
-            double accepted1 = perAceppted(s, average);
+             **/
+            double p = percentage_accepted(s, Tm);
             /**
              * Si la diferencia entre el porcentaje de aceptados con la temperatura media y el porcentaje de aceptados
              * que se desea es muy pequeña, se retorna el promedio entre las temperaturas dadas
              **/
-            if (Math.Abs(accepted - accepted1)<EACCEPTED)
-                return average;
+            if (Math.Abs(P - p) < EP_BINARY_SEARCH)
+                return Tm;
             /**
              * Si el porcentaje de aceptados con la temperatura media supera el porcentaje de aceptados deseados
-             * significa que se debe disminuir la temperatura y se busca entre temp1 y average para encontrar
+             * significa que se debe disminuir la temperatura y se busca entre T1 y Tm para encontrar
              * una temperaura promedio entre ellos que cumpla con los requisitos, el caso contrario sinifica
              * que se debe incrementar la temperatura y se realiza una busqueda entre la media y la temperatura 2
              * --------|-----|-----|------|----|-------
-             *        temp1  ?   average  ?  tem2
+             *        T1  ?   Tm  ?  T2
              *         
              **/
-            if (accepted1 > accepted)
-                return binarySearch(s, temp1, average, accepted);
+            if (p > P)
+                return binary_search(s, T1, Tm, P);
             else
-                return binarySearch(s, average, temp2, accepted);
-        }
-        /// <summary>
-        /// Cambia el valor de la temperatura según el factor de enfriamiento
-        /// </summary>
-        public void updateTemperature()
-        {
-            temperature = COOLING_FACTOR * temperature;
-            this.notify(null);
+                return binary_search(s, Tm, T2, P);
         }
         /// <summary>
         /// Regresa la temperatura actual del recocido simulado
@@ -470,8 +461,24 @@ namespace SimulatedAnneling.Model.Anneling
         /// <returns></returns>
         public ISolution getLastSolution()
         {
-            Batch b = this.getLastBatch();
-            return b.getLastSolution();
+            return solution;
+        }
+        public Boolean isSimulating()
+        {
+            return simulating;
+        }
+
+        public String getTime()
+        {
+            if (time != null)
+                return time.Hours + ":" + time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
+            else
+                return "-:-:-:-";
+        }
+
+        public ISolution getBest()
+        {
+            return bestSolution;
         }
     }
 }

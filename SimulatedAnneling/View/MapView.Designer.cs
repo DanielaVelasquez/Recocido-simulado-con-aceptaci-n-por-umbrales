@@ -30,6 +30,7 @@
         {
             this.grBxInformation = new System.Windows.Forms.GroupBox();
             this.lb_connected_cities = new System.Windows.Forms.Label();
+            this.btn_simulate = new System.Windows.Forms.Button();
             this.lsbox_connectedCities = new System.Windows.Forms.ListBox();
             this.txt_longitude = new System.Windows.Forms.TextBox();
             this.txt_latitude = new System.Windows.Forms.TextBox();
@@ -41,10 +42,9 @@
             this.lb_country = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lb_name = new System.Windows.Forms.Label();
-            this.btn_simulate = new System.Windows.Forms.Button();
             this.gboxSolution = new System.Windows.Forms.GroupBox();
             this.btnChart = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtTime = new System.Windows.Forms.TextBox();
             this.lbTime = new System.Windows.Forms.Label();
             this.txtCostFunction = new System.Windows.Forms.TextBox();
             this.lbCostFunction = new System.Windows.Forms.Label();
@@ -86,6 +86,17 @@
             this.lb_connected_cities.Size = new System.Drawing.Size(126, 22);
             this.lb_connected_cities.TabIndex = 11;
             this.lb_connected_cities.Text = "Connected cities";
+            // 
+            // btn_simulate
+            // 
+            this.btn_simulate.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_simulate.Location = new System.Drawing.Point(211, 763);
+            this.btn_simulate.Name = "btn_simulate";
+            this.btn_simulate.Size = new System.Drawing.Size(103, 38);
+            this.btn_simulate.TabIndex = 2;
+            this.btn_simulate.Text = "Simulate";
+            this.btn_simulate.UseVisualStyleBackColor = true;
+            this.btn_simulate.Click += new System.EventHandler(this.btn_simulate_Click);
             // 
             // lsbox_connectedCities
             // 
@@ -193,21 +204,10 @@
             this.lb_name.TabIndex = 0;
             this.lb_name.Text = "Name";
             // 
-            // btn_simulate
-            // 
-            this.btn_simulate.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_simulate.Location = new System.Drawing.Point(211, 763);
-            this.btn_simulate.Name = "btn_simulate";
-            this.btn_simulate.Size = new System.Drawing.Size(103, 38);
-            this.btn_simulate.TabIndex = 2;
-            this.btn_simulate.Text = "Simulate";
-            this.btn_simulate.UseVisualStyleBackColor = true;
-            this.btn_simulate.Click += new System.EventHandler(this.btn_simulate_Click);
-            // 
             // gboxSolution
             // 
             this.gboxSolution.Controls.Add(this.btnChart);
-            this.gboxSolution.Controls.Add(this.textBox1);
+            this.gboxSolution.Controls.Add(this.txtTime);
             this.gboxSolution.Controls.Add(this.lbTime);
             this.gboxSolution.Controls.Add(this.txtCostFunction);
             this.gboxSolution.Controls.Add(this.lbCostFunction);
@@ -231,15 +231,15 @@
             this.btnChart.Text = "See Charts";
             this.btnChart.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtTime
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.textBox1.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(401, 104);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(245, 27);
-            this.textBox1.TabIndex = 5;
+            this.txtTime.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.txtTime.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTime.Location = new System.Drawing.Point(401, 104);
+            this.txtTime.Name = "txtTime";
+            this.txtTime.ReadOnly = true;
+            this.txtTime.Size = new System.Drawing.Size(245, 27);
+            this.txtTime.TabIndex = 5;
             // 
             // lbTime
             // 
@@ -290,6 +290,7 @@
             this.lsBoxCities.Name = "lsBoxCities";
             this.lsBoxCities.Size = new System.Drawing.Size(240, 114);
             this.lsBoxCities.TabIndex = 0;
+            this.lsBoxCities.SelectedIndexChanged += new System.EventHandler(this.lsBoxCities_SelectedIndexChanged);
             // 
             // MapView
             // 
@@ -327,7 +328,7 @@
         private System.Windows.Forms.Button btn_simulate;
         private System.Windows.Forms.GroupBox gboxSolution;
         private System.Windows.Forms.Button btnChart;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtTime;
         private System.Windows.Forms.Label lbTime;
         private System.Windows.Forms.TextBox txtCostFunction;
         private System.Windows.Forms.Label lbCostFunction;

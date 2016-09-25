@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using SimulatedAnneling.Controller;
 using System.Collections;
@@ -21,7 +21,7 @@ namespace SimulatedAnneling.View
         ///<summary>
         ///Cantidad mínima de ciudades para la simulación
         ///</summary>
-        private const int MIN_CITIES = 10;
+        private const int MIN_CITIES = 1;
         /// <summary>
         /// Cantidad mínima de semillas para la simulación
         /// </summary>
@@ -42,6 +42,8 @@ namespace SimulatedAnneling.View
         public SimulationSettings()
         {
             InitializeComponent();
+            lb_message_simulating.Visible = false;
+
             controller = TravelerSalesmanProblem.getInstance();
             /*controller.addSimulation(3);
             controller.simulacion(10);
@@ -82,6 +84,27 @@ namespace SimulatedAnneling.View
         private void btn_run_Click(object sender, EventArgs e)
         {
             int seed = (int) numUpSeeds.Value;
+            int cities = (int)numUpNumberCities.Value;
+
+            controller.set_simulation(seed, cities);
+            controller.simulate();
+            Thread.Sleep(5000);
+            btn_run.Enabled = false;
+
+            while(controller.getSimulation().isSimulating())
+            {
+
+            }
+
+            this.Hide();
+
+            MapView map = new MapView(MapView.MODE_SOLUTION);
+            map.Show();
+        }
+
+        private void numUpNumberCities_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

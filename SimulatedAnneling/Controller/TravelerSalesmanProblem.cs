@@ -53,13 +53,13 @@ namespace SimulatedAnneling.Controller
         /// <summary>
         /// Cero virtual para el equilibrio témico
         /// </summary>
-        private const double EP = 0.8142;
+        private const double EP_INITIAL_TEMPERATURE = 0.086;
 
 
         /// <summary>
         /// Cero virtual para la temperatura
         /// </summary>
-        private const double E = 0.79;
+        private const double E_SIMULATED_ANNELING = 0.79;
 
         /// <summary>
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
@@ -72,18 +72,22 @@ namespace SimulatedAnneling.Controller
         /// busqueda binaria, al preguntar por la diferencia
         /// de sus temperaturas
         /// </summary>
-        private const double ET = 0.43;
+        private const double ET_BINARY_SEARCH = 0.43;
         
         /// <summary>
         /// Cero virtual para algoritmo de busqueda binaria
         /// con base en el promedio de los aceptados
         /// </summary>
-        private const double EACCEPTED = 0.025;
+        private const double EP_BINARY_SEARCH = 0.025;
+        /// <summary>
+        /// Cero virtual para el algoritmo de recocido simulado
+        /// </summary>
+        private const double EP_SIMULATED_ANNELING = 0.8142;
         /// <summary>
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
         /// </summary>
-        private const int N = 150;
+        private const int N_PERCENTAGE_ACCEPTED = 150;
         /// <summary>
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
@@ -106,7 +110,7 @@ namespace SimulatedAnneling.Controller
         /// <summary>
         /// Simulación que se está realizando
         /// </summary>
-        private SimulatedAnneling.Model.Anneling.SimulatedAnneling simulation;
+        private SimulatedAnneling.Model.Anneling.Simulation simulation;
 
 
         /**-------------------------------------------------------------------------------------------
@@ -154,89 +158,25 @@ namespace SimulatedAnneling.Controller
             return tourManager.countCities();
         }
 
-        public void simulate(int seed,int cities)
+        public void simulate()
         {
-            simulation = new Model.Anneling.SimulatedAnneling(seed, COOLING_FACTOR, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS, tourManager);
-            tourManager.setCitiesSimulation(cities);
             Thread thread = new Thread(simulating);
             thread.Start();
+        }
+        public void set_simulation(int seed, int cities)
+        {
+            simulation = new Simulation(seed, COOLING_FACTOR, BATCH_SIZE, MAX_ITERATION_BATCH, EP_INITIAL_TEMPERATURE, E_SIMULATED_ANNELING, INITIAL_TEMPERATURE, ET_BINARY_SEARCH, EP_BINARY_SEARCH, N_PERCENTAGE_ACCEPTED, ACCEPTED_SOLUTIONS,EP_SIMULATED_ANNELING, tourManager);
+            tourManager.setCitiesSimulation(cities);
         }
         private void simulating()
         {
             simulation.simulate();
         }
-        /*
-        public void simulacion(int cities)
-        {
-            tourManager.setCitiesSimulation(cities);
-            string[] lines = { "si", "no" };
-            File.AppendAllLines("WriteFile.txt", lines);
-            double i = 0.5;
-            double f = 0.7;
-            double ri = 27.001096637526665;
-            double rf = 104.8508596852175;
-
-            double respuesta = binario(ri, rf, i, f,0);
-
-            
-
-
-         
-
-
-            
-        }
-        private double binario(double ri,double rf, double i,double f, int iteracion)
-        {
-            if(f<i  && iteracion<7)
-            {
-                if (ri < rf)
-                    return f;
-                else
-                    return i;
-            }
-
-            double average = (i + f) / 2;
-
-            double value = calculatevalue(average);
-
-            if (ri > rf)
-            {
-                return binario(ri, value, i, average,iteracion++);
-            }
-            else
-            {
-                return binario(value, rf, average, f,iteracion++);
-            }
-
-
-            
-
-            
-        }
-
-        private double calculatevalue(double cooling)
-        {
-            DateTime inicio = DateTime.Now;
-            SimulatedAnneling.Model.Anneling.SimulatedAnneling s = new SimulatedAnneling.Model.Anneling.SimulatedAnneling(3, cooling, BATCH_SIZE, MAX_ITERATION_BATCH, EP, E, INITIAL_TEMPERATURE, ET, EACCEPTED, N, ACCEPTED_SOLUTIONS, tourManager);
-            double v = s.simulate().calculateCostFunction();
-            DateTime end = DateTime.Now;
-            TimeSpan t = end - inicio;
-
-            int seconds = t.Seconds + t.Minutes * 60 + t.Hours * 60 * 60;
-
-            string[] lines = { "Seconds: " + seconds + " cost: " + v };
-            File.AppendAllLines("WriteFile.txt", lines);
-
-
-            return v * 0.55 + seconds * 0.45;
-        }
-        */
-
-        public Model.Anneling.SimulatedAnneling getSimulation()
+        public Simulation getSimulation()
         {
             return simulation;
-
         }
+
+        
     }
 }
