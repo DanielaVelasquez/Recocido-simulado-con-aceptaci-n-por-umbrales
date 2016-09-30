@@ -15,4 +15,4 @@ C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimizaci
 C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\GMap.NET.Core.xml
 C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\GMap.NET.WindowsForms.xml
 C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\bin\Debug\BSE.Windows.Forms.dll
-C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.View.Chart_Temperature_CostFunction.resources
+C:\Users\danyv\Google Drive\Octavo semestre\Seminario Heurísticas de optimización combinatoria\Recocido simulado\SimulatedAnneling\SimulatedAnneling\obj\Debug\SimulatedAnneling.View.Chart.resources

@@ -230,6 +230,7 @@
             this.btnChart.TabIndex = 6;
             this.btnChart.Text = "See Charts";
             this.btnChart.UseVisualStyleBackColor = true;
+            this.btnChart.Click += new System.EventHandler(this.btnChart_Click);
             // 
             // txtTime
             // 

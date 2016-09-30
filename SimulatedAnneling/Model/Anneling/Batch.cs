@@ -45,6 +45,10 @@ namespace SimulatedAnneling.Model.Anneling
         /// Máximo número de iteraciones de un lote
         /// </summary>
         private int MAX_ITERATIONS;
+        /// <summary>
+        /// Lista contiene los costos de función de todas las soluciones aceptadas
+        /// </summary>
+        private List<double> costs_functions;
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -56,6 +60,7 @@ namespace SimulatedAnneling.Model.Anneling
             L = NBACTH_SIZE;
             MAX_ITERATIONS = NMAX_ITERATIONS;
             solutions = new ArrayList();
+            costs_functions = new List<double>();
         }
         
         /// <summary>
@@ -125,6 +130,8 @@ namespace SimulatedAnneling.Model.Anneling
 
                     //Guarda todas las soluciones generadas por el lote
                     solutions.Add(s1);
+
+                    costs_functions.Add(s1.calculateCostFunction());
                 }
                 iterations = iterations + 1;
             }
@@ -137,6 +144,16 @@ namespace SimulatedAnneling.Model.Anneling
             */
             lastSolution = s;
             return r / (double)L;
+        }
+        /// <summary>
+        /// Retorna lista de  funcion de costo de cada
+        /// solución encontrada
+        /// </summary>
+        /// <returns>lista funciones de costo de cada solucion encontrada</returns>
+        public List<double> get_costs_function()
+        {
+
+            return costs_functions;
         }
     }
 }

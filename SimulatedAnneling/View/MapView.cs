@@ -18,6 +18,7 @@ using SimulatedAnneling.Model.TravelerSalesmanProblem;
 using System.Threading;
 using SimulatedAnneling.ObserverPattern;
 using SimulatedAnneling.Model.Anneling;
+using SimulatedAnneling.Model;
 
 namespace SimulatedAnneling.View
 {
@@ -36,6 +37,14 @@ namespace SimulatedAnneling.View
         /// Modo para que el mapa muestre una solución
         /// </summary>
         public const int MODE_SOLUTION = 2;
+        /// <summary>
+        /// Titulo para el gráfico de temperatura vs funcion de costos
+        /// </summary>
+        private const String TEMP_FUNC_TITLE = "Cost function";
+        /// <summary>
+        /// Nombre de la serie par las gráficas de costo de funcion
+        /// </summary>
+        private const String TEMP_FUNC_SERIE = "CostFunction";
 
         /**-------------------------------------------------------------------------------------------
          * Atributos
@@ -409,6 +418,28 @@ namespace SimulatedAnneling.View
             if (c != null)
             {
                 gmap.Position = new PointLatLng(c.getLatitude(), c.getLongitude());
+            }
+        }
+
+        private void btnChart_Click(object sender, EventArgs e)
+        {
+            Simulation s = controller.getSimulation();
+            if(! s.isSimulating())
+            {
+                Chart chart = new Chart(TEMP_FUNC_SERIE, TEMP_FUNC_TITLE);
+
+                List<double> costs = s.get_costs_function();//s.getAcceptedSolutions();
+                int x = 1;
+                foreach(double p in costs)
+                {
+                    SimulatedAnneling.Model.Point point = new Model.Point(x, p);
+                    chart.addPoint(point);
+                    x++;
+                }
+                /*
+                chart.addPoint(new Model.Point(0.5, 1.358));
+                chart.addPoint(new Model.Point(2, 0.23));*/
+                chart.Show();
             }
         }
         

@@ -37,7 +37,7 @@ namespace SimulatedAnneling.Controller
         /// Factor de enfriamiento del sistema, determina que tan rápido o lento
         /// la temperatura disminuyendo
         /// </summary>
-        private const double COOLING_FACTOR = 0.61946875;
+        private const double COOLING_FACTOR = 0.875;
 
         /// <summary>
         /// Tamaño de los lotes que se van a generar
@@ -82,7 +82,7 @@ namespace SimulatedAnneling.Controller
         /// <summary>
         /// Cero virtual para el algoritmo de recocido simulado
         /// </summary>
-        private const double EP_SIMULATED_ANNELING = 0.8142;
+        private const double EP_SIMULATED_ANNELING = 0.9387;
         /// <summary>
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial

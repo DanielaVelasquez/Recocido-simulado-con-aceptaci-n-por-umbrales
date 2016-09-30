@@ -1,6 +1,6 @@
 ﻿namespace SimulatedAnneling.View
 {
-    partial class Chart_Temperature_CostFunction
+    partial class Chart
     {
         /// <summary>
         /// Required designer variable.
@@ -31,43 +31,56 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
+            this.lb_title = new System.Windows.Forms.Label();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
-            // chart
+            // lb_title
+            // 
+            this.lb_title.AutoSize = true;
+            this.lb_title.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_title.Location = new System.Drawing.Point(93, 9);
+            this.lb_title.Name = "lb_title";
+            this.lb_title.Size = new System.Drawing.Size(88, 35);
+            this.lb_title.TabIndex = 1;
+            this.lb_title.Text = "Titulo";
+            // 
+            // chart1
             // 
             chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
-            this.chart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
-            this.chart.Location = new System.Drawing.Point(42, 55);
-            this.chart.Name = "chart";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(38, 76);
+            this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
-            this.chart.Series.Add(series1);
-            this.chart.Size = new System.Drawing.Size(618, 415);
-            this.chart.TabIndex = 0;
-            this.chart.Text = "chart1";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(680, 352);
+            this.chart1.TabIndex = 2;
+            this.chart1.Text = "chart1";
             // 
-            // Chart_Temperature_CostFunction
+            // Chart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 482);
-            this.Controls.Add(this.chart);
-            this.Name = "Chart_Temperature_CostFunction";
-            this.Text = "Chart_Temperature_CostFunction";
-            this.Load += new System.EventHandler(this.Chart_Temperature_CostFunction_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
+            this.ClientSize = new System.Drawing.Size(741, 456);
+            this.Controls.Add(this.chart1);
+            this.Controls.Add(this.lb_title);
+            this.Name = "Chart";
+            this.Text = "Chart";
+            this.Load += new System.EventHandler(this.Chart_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart;
+        private System.Windows.Forms.Label lb_title;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }

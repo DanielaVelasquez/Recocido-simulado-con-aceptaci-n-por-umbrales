@@ -19,7 +19,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         ///<summary>
         ///Valor permite representar la no existencia de conexión entre una ciudad y otra
         ///</summary>
-        public const double INFINITE = 22171957741.07997;//double.MaxValue;
+        public const double INFINITE = 22171957741;//22171957741.07997;//double.MaxValue;
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------

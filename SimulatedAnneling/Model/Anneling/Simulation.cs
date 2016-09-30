@@ -115,6 +115,8 @@ namespace SimulatedAnneling.Model.Anneling
         /// </summary>
         private TimeSpan time;
 
+        private List<Point> accepted_solutions;
+
         /**-------------------------------------------------------------------------------------------
         * Métodos
         *--------------------------------------------------------------------------------------------
@@ -145,6 +147,8 @@ namespace SimulatedAnneling.Model.Anneling
             batches = new ArrayList();
             manager = m;
             simulating = false;
+
+            accepted_solutions = new List<Point>();
         }
         /// <summary>
         /// Realiza la simulación del recocido y retorna la mejor solución encontrada
@@ -157,6 +161,7 @@ namespace SimulatedAnneling.Model.Anneling
 
             //Genera una solución inicial
             ISolution initial_solution = manager.getRamdomSolution(random);
+            Console.WriteLine("Initial solution: " + initial_solution.ToString());
             solution = initial_solution;
 
             //Calcula la temperatura inicial del problema 
@@ -210,6 +215,7 @@ namespace SimulatedAnneling.Model.Anneling
         private void simulated_anneling()
         {
             double p = double.MaxValue;
+            accepted_solutions.Add(new Point(bestSolution.calculateCostFunction(), temperature));
 
             //Determina si aún se están generando soluciones en un lote
             Boolean isWorking = true;
@@ -225,6 +231,8 @@ namespace SimulatedAnneling.Model.Anneling
 
                     p = batch.calculate_batch(temperature, solution, random);
                     solution = batch.getLastSolution();
+
+                    accepted_solutions.Add(new Point(solution.calculateCostFunction(), temperature));
 
                     isWorking = batch.isFinished();
 
@@ -253,6 +261,10 @@ namespace SimulatedAnneling.Model.Anneling
                 }
                 temperature = COOLING_FACTOR * temperature;
             }
+        }
+        public List<Point> getAcceptedSolutions()
+        {
+            return accepted_solutions;
         }
         /// <summary>
         /// Retorna el último lote generado en caso de que exista
@@ -480,5 +492,21 @@ namespace SimulatedAnneling.Model.Anneling
         {
             return bestSolution;
         }
+        /// <summary>
+        /// Retorna un listado de parejas de valores que incluye(temperature, cost_function) 
+        /// </summary>
+        /// <returns>listado parejas </returns>
+        public List<double> get_costs_function()
+        {
+            List<double> costs = new List<double>();
+
+            foreach(Batch b in batches)
+            {
+                costs.AddRange(b.get_costs_function());
+            }
+
+            return costs;
+        }
+
     }
 }
