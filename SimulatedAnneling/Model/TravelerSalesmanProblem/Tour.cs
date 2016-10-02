@@ -18,6 +18,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         ///Ciudades deben recorrer para realizar un tour
         ///</summary>
         private ArrayList cities;
+        
 
         /**-------------------------------------------------------------------------------------------
          * Metodos
@@ -63,7 +64,9 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                 City next = (City)  cities[i+1];
                 sum = sum + c.distanceTo(next.getId());
             }
-            return sum / City.INFINITE;
+            double a = sum / TourManager.get_infinite();
+            double b = sum / (TourManager.M * (TourManager.K - 1));
+            return a;
         }
         public ISolution getNeighbour(Random random)
         {
@@ -92,7 +95,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         }
         public override string ToString()
         {
-            String s = "Cost function: "+calculateCostFunction()+"\n";
+            String s = "Cost function: "+calculateCostFunction()+"\nTotal distance: "+total_distance();
             foreach(City c in cities)
             {
                 s = s + " [ " + c.ToString() + " ]";
@@ -102,6 +105,17 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         public ArrayList getCities()
         {
             return cities;
+        }
+        public double total_distance()
+        {
+            double sum = 0;
+            for (int i = 0; i < cities.Count - 1; i++)
+            {
+                City c = (City)cities[i];
+                City next = (City)cities[i + 1];
+                sum = sum + c.distanceTo(next.getId());
+            }
+            return sum;
         }
     }
 }

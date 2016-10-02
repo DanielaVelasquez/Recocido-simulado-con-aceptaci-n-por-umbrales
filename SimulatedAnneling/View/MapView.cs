@@ -430,6 +430,7 @@ namespace SimulatedAnneling.View
 
                 List<double> costs = s.get_costs_function();//s.getAcceptedSolutions();
                 int x = 1;
+                Console.WriteLine("Se aceptaron: " + costs.Count+" funciones");
                 foreach(double p in costs)
                 {
                     SimulatedAnneling.Model.Point point = new Model.Point(x, p);

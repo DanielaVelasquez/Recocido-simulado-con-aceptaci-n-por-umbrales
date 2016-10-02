@@ -53,7 +53,6 @@ namespace SimulatedAnneling.View
         /// <param name="y">valor en y</param>
         public void addPoint(SimulatedAnneling.Model.Point p)
         {
-            Console.WriteLine( p.getX() + "-" + p.getY());
             chart1.Series[0].Points.AddXY(p.getX(), p.getY());
         }
     }

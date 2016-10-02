@@ -37,23 +37,23 @@ namespace SimulatedAnneling.Controller
         /// Factor de enfriamiento del sistema, determina que tan rápido o lento
         /// la temperatura disminuyendo
         /// </summary>
-        private const double COOLING_FACTOR = 0.875;
+        private const double COOLING_FACTOR = 0.8575;
 
         /// <summary>
         /// Tamaño de los lotes que se van a generar
         /// </summary>
-        private const int BATCH_SIZE = 100;
+        private const double BATCH_SIZE = 500;
 
         /// <summary>
         /// Máxima cantidad de iteraciones permitidas cuando se trata
         /// de generar un lote
         /// </summary>
-        private const int MAX_ITERATION_BATCH = BATCH_SIZE * 300;
+        private const double MAX_ITERATION_BATCH = BATCH_SIZE * 300;
 
         /// <summary>
         /// Cero virtual para el equilibrio témico
         /// </summary>
-        private const double EP_INITIAL_TEMPERATURE = 0.086;
+        private const double EP_INITIAL_TEMPERATURE = 0.045;
 
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace SimulatedAnneling.Controller
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
         /// segun el problema
         /// </summary>
-        private const int INITIAL_TEMPERATURE = 8;
+        private const double INITIAL_TEMPERATURE = 8;
 
         /// <summary>
         /// Cero virtual para ayudar a detener el algoritmo de
@@ -82,17 +82,17 @@ namespace SimulatedAnneling.Controller
         /// <summary>
         /// Cero virtual para el algoritmo de recocido simulado
         /// </summary>
-        private const double EP_SIMULATED_ANNELING = 0.9387;
+        private const double EP_SIMULATED_ANNELING = 0.3458;
         /// <summary>
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
         /// </summary>
-        private const int N_PERCENTAGE_ACCEPTED = 150;
+        private const double N_PERCENTAGE_ACCEPTED = 150;
         /// <summary>
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
         /// </summary>
-        private const double ACCEPTED_SOLUTIONS = 0.8756;
+        private const double ACCEPTED_SOLUTIONS = 0.95;
 
         /**-------------------------------------------------------------------------------------------
          * Atributos

@@ -24,6 +24,11 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         ///Valor por defecto cuando no se han configurado la cantidad de ciudades a simular
         ///</summary>
         private const int CITIES_SIMULATION_NULL = -1;
+        ///<summary>
+        ///Valor permite representar la no existencia de conexión entre una ciudad y otra
+        ///</summary>
+        public const double DIAMETER = 12742000;//445970000;//->35//318550000;//->25veces tierr//101936000;//89194000;//22171957741;//22171957741.07997;//double.MaxValue;
+        
         /**-------------------------------------------------------------------------------------------
          * Atributos
          *--------------------------------------------------------------------------------------------
@@ -43,11 +48,18 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <summary>
         /// Cantidad de ciudades utilizar para la simulacion
         /// </summary>
-        private int numberCitiesSimulation;
+        private static double numberCitiesSimulation = CITIES_SIMULATION_NULL;
         /// <summary>
         /// Ciudades quiere aparezcan en la simulación
         /// </summary>
-        private ArrayList citiesSimulation;
+        private ArrayList citiesSimulation;///<summary>
+        ///Distancia máxima entre las k ciudades que se van a trabajar en la simulación 
+        ///</summary>
+        public static double M = -1;
+
+        public static double INFINITE = 10 * M;
+
+        public static double K = -1;
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -60,6 +72,10 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             cities = cityDAO.getCities(this);
             numberCitiesSimulation = CITIES_SIMULATION_NULL;
             citiesSimulation = null;
+        }
+        public static double  get_infinite()
+        {
+            return DIAMETER * numberCitiesSimulation;
         }
         /// <summary>
         /// Entrega las ciudades involucradas en el problema
@@ -77,6 +93,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             //TODO VOLVER NULA LA CANTIDAD DE CIUDADES DESPUES DE CADA SIMULACION
             numberCitiesSimulation = n;
+            K = n;
         }
 
         public ISolution getRamdomSolution(Random random)
@@ -147,9 +164,31 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
 
 
                 }
+                calculate_M(c);
                 return new Tour(c);
             }
 
+        }
+        /// <summary>
+        /// Calcula la distancia máxima entre las ciudades de la solución inicial
+        /// </summary>
+        /// <param name="t">conjunto de ciudades </param>
+        private void calculate_M(ArrayList t)
+        {
+            double sum = 0;
+            ArrayList tour = (ArrayList) t.Clone();
+            foreach(City c in tour)
+            {
+                Hashtable n = c.getAdjacencies();
+                foreach(DictionaryEntry e in n)
+                {
+                    if(findCityBy((int)e.Key,tour)!=null)
+                    {
+                        sum = sum + (double) e.Value;
+                    }
+                }
+            }
+            M = sum;
         }
         /// <summary>
         /// Encuentra el identificador de la ciudad vecina con mayor distancia 

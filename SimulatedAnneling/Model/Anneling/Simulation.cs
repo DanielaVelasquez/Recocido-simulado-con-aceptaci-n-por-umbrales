@@ -51,13 +51,13 @@ namespace SimulatedAnneling.Model.Anneling
         /// <summary>
         /// Tamaño de los lotes que se van a generar
         /// </summary>
-        private int BATCH_SIZE ;
+        private double BATCH_SIZE ;
 
         /// <summary>
         /// Máxima cantidad de iteraciones permitidas cuando se trata
         /// de generar un lote
         /// </summary>
-        private int MAX_ITERATION_BATCH ;
+        private double MAX_ITERATION_BATCH;
 
         /// <summary>
         /// Cero virtual para el equilibrio témico
@@ -73,7 +73,7 @@ namespace SimulatedAnneling.Model.Anneling
         /// Valor de la temperatura inicial para el calculo de la temperatura inicial,
         /// segun el problema
         /// </summary>
-        private int INITIAL_TEMPERATURE;
+        private double INITIAL_TEMPERATURE;
 
         /// <summary>
         /// Cero virtual para ayudar a detener el algoritmo de
@@ -96,7 +96,7 @@ namespace SimulatedAnneling.Model.Anneling
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
         /// </summary>
-        private int N_PERCENTAGE_ACCEPTED;
+        private double N_PERCENTAGE_ACCEPTED;
         /// <summary>
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
@@ -115,7 +115,6 @@ namespace SimulatedAnneling.Model.Anneling
         /// </summary>
         private TimeSpan time;
 
-        private List<Point> accepted_solutions;
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
@@ -125,9 +124,9 @@ namespace SimulatedAnneling.Model.Anneling
         /// Constructor para el recocido simulado
         /// </summary>
         /// <param name="nSeed">Valor de la semilla para obtener la aletoridad</param>
-        public Simulation(int nSeed, double COOLING_FACTOR, int BATCH_SIZE, int MAX_ITERATION_BATCH
-                                 , double EP, double E, int INITIAL_TEMPERATURE, double ET, double EACCEPTED
-                                 , int N, double ACCEPTED_SOLUTIONS, double EP_SIMULATED_ANNELING,IManager m)
+        public Simulation(int nSeed, double COOLING_FACTOR, double BATCH_SIZE, double MAX_ITERATION_BATCH
+                                 , double EP, double E, double INITIAL_TEMPERATURE, double ET, double EACCEPTED
+                                 , double N, double ACCEPTED_SOLUTIONS, double EP_SIMULATED_ANNELING, IManager m)
         {
             this.ACCEPTED_SOLUTIONS = ACCEPTED_SOLUTIONS;
             this.N_PERCENTAGE_ACCEPTED = N;
@@ -148,7 +147,6 @@ namespace SimulatedAnneling.Model.Anneling
             manager = m;
             simulating = false;
 
-            accepted_solutions = new List<Point>();
         }
         /// <summary>
         /// Realiza la simulación del recocido y retorna la mejor solución encontrada
@@ -161,6 +159,7 @@ namespace SimulatedAnneling.Model.Anneling
 
             //Genera una solución inicial
             ISolution initial_solution = manager.getRamdomSolution(random);
+            initial_solution.calculateCostFunction();
             Console.WriteLine("Initial solution: " + initial_solution.ToString());
             solution = initial_solution;
 
@@ -215,7 +214,6 @@ namespace SimulatedAnneling.Model.Anneling
         private void simulated_anneling()
         {
             double p = double.MaxValue;
-            accepted_solutions.Add(new Point(bestSolution.calculateCostFunction(), temperature));
 
             //Determina si aún se están generando soluciones en un lote
             Boolean isWorking = true;
@@ -230,9 +228,7 @@ namespace SimulatedAnneling.Model.Anneling
                     batches.Add(batch);
 
                     p = batch.calculate_batch(temperature, solution, random);
-                    solution = batch.getLastSolution();
-
-                    accepted_solutions.Add(new Point(solution.calculateCostFunction(), temperature));
+                   solution = batch.getLastSolution();
 
                     isWorking = batch.isFinished();
 
@@ -261,10 +257,6 @@ namespace SimulatedAnneling.Model.Anneling
                 }
                 temperature = COOLING_FACTOR * temperature;
             }
-        }
-        public List<Point> getAcceptedSolutions()
-        {
-            return accepted_solutions;
         }
         /// <summary>
         /// Retorna el último lote generado en caso de que exista
@@ -380,7 +372,7 @@ namespace SimulatedAnneling.Model.Anneling
         {
             ISolution s = (ISolution)solution.Clone();
             //Cantidad de soluciones aceptadas
-            int c = 0;
+            double c = 0;
             //Se generan N vecinos a partir de una solución
             for(int i = 0; i<N_PERCENTAGE_ACCEPTED; i++)
             {

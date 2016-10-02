@@ -40,11 +40,11 @@ namespace SimulatedAnneling.Model.Anneling
         /// <summary>
         /// Tamaño de un lote
         /// </summary>
-        private int L;
+        private double L;
         /// <summary>
         /// Máximo número de iteraciones de un lote
         /// </summary>
-        private int MAX_ITERATIONS;
+        private double MAX_ITERATIONS;
         /// <summary>
         /// Lista contiene los costos de función de todas las soluciones aceptadas
         /// </summary>
@@ -54,8 +54,8 @@ namespace SimulatedAnneling.Model.Anneling
          * Métodos
          *--------------------------------------------------------------------------------------------
          **/
-        
-        public Batch(int NBACTH_SIZE, int NMAX_ITERATIONS)
+
+        public Batch(double NBACTH_SIZE, double NMAX_ITERATIONS)
         {
             L = NBACTH_SIZE;
             MAX_ITERATIONS = NMAX_ITERATIONS;

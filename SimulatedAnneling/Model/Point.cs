@@ -34,5 +34,10 @@ namespace SimulatedAnneling.Model
         {
             return x+" "+y;
         }
+        public override bool Equals(object obj)
+        {
+            Point other = (Point)obj;
+            return (x == other.getX() && y == other.getY()) || (x == other.getY() && y == other.getX());
+        }
     }
 }
