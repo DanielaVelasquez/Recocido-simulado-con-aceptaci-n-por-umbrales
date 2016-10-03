@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SimulatedAnneling.Controller;
 using System.Collections;
 using SimulatedAnneling.Model.Anneling;
+using System.IO;
 namespace SimulatedAnneling.View
 {
     public partial class SimulationSettings : Form
@@ -35,14 +36,22 @@ namespace SimulatedAnneling.View
          *--------------------------------------------------------------------------------------------
          **/
         private TravelerSalesmanProblem controller;
+        /// <summary>
+        /// Ventana dialogo escoger archivo
+        /// </summary>
+        private OpenFileDialog file_dialog;
+
+        private MapView map_first;
+        
+        
         /**-------------------------------------------------------------------------------------------
          * Métodos
          *--------------------------------------------------------------------------------------------
          **/
-        public SimulationSettings()
+        public SimulationSettings(MapView map_first)
         {
+            this.map_first = map_first;
             InitializeComponent();
-            lb_message_simulating.Visible = false;
 
             controller = TravelerSalesmanProblem.getInstance();
             /*controller.addSimulation(3);
@@ -83,28 +92,79 @@ namespace SimulatedAnneling.View
 
         private void btn_run_Click(object sender, EventArgs e)
         {
-            int seed = (int) numUpSeeds.Value;
-            int cities = (int)numUpNumberCities.Value;
-
-            controller.set_simulation(seed, cities);
-            controller.simulate();
-            Thread.Sleep(5000);
-            btn_run.Enabled = false;
-
-            while(controller.getSimulation().isSimulating())
+            try
             {
 
+                int seed = (int)numUpSeeds.Value;
+                int cities = (int)numUpNumberCities.Value;
+
+                if (txt_file.Text.Equals(""))
+                    controller.set_simulation(seed, cities);
+                else
+                    controller.set_simulation(seed, cities, txt_file.Text);
+
+                controller.simulate();
+                Thread.Sleep(5000);
+                btn_run.Enabled = false;
+
+                while (controller.getSimulation().isSimulating())
+                {
+
+                }
+
+                this.Hide();
+
+
+                btn_run.Enabled = true;
+                MapView map = new MapView(MapView.MODE_SOLUTION,this);
+                map.Show();
             }
-
-            this.Hide();
-
-            MapView map = new MapView(MapView.MODE_SOLUTION);
-            map.Show();
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void numUpNumberCities_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btn_file_Click(object sender, EventArgs e)
+        {
+            file_dialog = new OpenFileDialog();
+            Stream myStream  =null;
+            file_dialog.InitialDirectory = "c:\\desktop";
+            file_dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            file_dialog.FilterIndex = 2;
+
+            if (file_dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = file_dialog.OpenFile()) != null)
+                    {
+                        String name = file_dialog.FileName;
+                        txt_file.Text = name;
+                        txt_file.Enabled = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
+        }
+
+        private void btn_clear_Click(object sender, EventArgs e)
+        {
+            txt_file.Text = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            map_first.Show();
+            this.Dispose();
         }
     }
 }

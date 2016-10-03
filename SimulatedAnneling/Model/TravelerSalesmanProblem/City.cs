@@ -100,16 +100,32 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <returns>distancia entre la ciudad actual y la ciudad con identificador id</returns>
         public double distanceTo(int id)
         {
-            try
+            if(adjacencies.ContainsKey(id))
             {
-                double l = (double)adjacencies[id];
-                return  l;
+                return (double)adjacencies[id];
             }
-            catch
+            else
             {
                 return TourManager.get_infinite();
             }
         }   
+        /// <summary>
+        /// Determina si existe a la ciudad con id
+        /// </summary>
+        /// <param name="id">id de la ciudad que se desea saber si hay camino</param>
+        /// <returns>verdadero si hay camino, falso en caso contrario</returns>
+        public Boolean is_path_to(int id)
+        {
+            try
+            {
+                double l = (double)adjacencies[id];
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         /// <summary>
         /// Obtiene una lista de la ciudades adyacentes a la ciudad actual
         /// </summary>

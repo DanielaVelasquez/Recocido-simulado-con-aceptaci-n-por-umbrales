@@ -39,7 +39,7 @@ namespace SimulatedAnneling.View
             chart1.Series.Clear();
             chart1.Series.Add(serie_name);
             chart1.Series[serie_name].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            lb_title.Text = title;
+            //lb_title.Text = title;
         }
 
         private void Chart_Load(object sender, EventArgs e)

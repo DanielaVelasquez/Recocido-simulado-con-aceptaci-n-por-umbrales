@@ -50,6 +50,7 @@
             this.lbCostFunction = new System.Windows.Forms.Label();
             this.lbSolutionCities = new System.Windows.Forms.Label();
             this.lsBoxCities = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.grBxInformation.SuspendLayout();
             this.gboxSolution.SuspendLayout();
             this.SuspendLayout();
@@ -206,6 +207,7 @@
             // 
             // gboxSolution
             // 
+            this.gboxSolution.Controls.Add(this.button1);
             this.gboxSolution.Controls.Add(this.btnChart);
             this.gboxSolution.Controls.Add(this.txtTime);
             this.gboxSolution.Controls.Add(this.lbTime);
@@ -293,6 +295,17 @@
             this.lsBoxCities.TabIndex = 0;
             this.lsBoxCities.SelectedIndexChanged += new System.EventHandler(this.lsBoxCities_SelectedIndexChanged);
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(414, 163);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(113, 35);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Back";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MapView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -335,5 +348,6 @@
         private System.Windows.Forms.Label lbCostFunction;
         private System.Windows.Forms.Label lbSolutionCities;
         private System.Windows.Forms.ListBox lsBoxCities;
+        private System.Windows.Forms.Button button1;
     }
 }

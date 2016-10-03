@@ -19,7 +19,7 @@ namespace SimulatedAnneling.Model.Anneling
         ///<summary>
         ///Soluciones aceptadas por un lote
         ///</summary>
-        private ArrayList solutions;
+        private List<ISolution> solutions;
         /// <summary>
         /// Temperatura en la cual fue generado el lote
         /// </summary>
@@ -59,7 +59,7 @@ namespace SimulatedAnneling.Model.Anneling
         {
             L = NBACTH_SIZE;
             MAX_ITERATIONS = NMAX_ITERATIONS;
-            solutions = new ArrayList();
+            solutions = new List<ISolution>();
             costs_functions = new List<double>();
         }
         
@@ -118,30 +118,28 @@ namespace SimulatedAnneling.Model.Anneling
             while(c<L && iterations<MAX_ITERATIONS)
             {
                 ISolution s1 = s.getNeighbour(random);
-
+                
                 if (s1.calculateCostFunction() < best.calculateCostFunction())
                     best = s1;
 
-                if(s1.calculateCostFunction() <= (s.calculateCostFunction() + T))
+                double s1_cost_function = s1.calculateCostFunction();
+                double s_cost_function = s.calculateCostFunction();
+                if (s1_cost_function <= (s_cost_function + T))
                 {
                     s = s1;
                     c = c + 1;
-                    r = r + s1.calculateCostFunction();
+                    r = r + s1_cost_function;
 
                     //Guarda todas las soluciones generadas por el lote
                     solutions.Add(s1);
 
-                    costs_functions.Add(s1.calculateCostFunction());
+                    costs_functions.Add(s1_cost_function);
                 }
                 iterations = iterations + 1;
             }
+
+           
             finished = c == L;
-            //Determina si el lote terminó
-            /*if (c==L)
-                finished = false;
-            else
-                finished = true;
-            */
             lastSolution = s;
             return r / (double)L;
         }

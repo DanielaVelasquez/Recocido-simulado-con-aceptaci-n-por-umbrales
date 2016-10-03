@@ -78,6 +78,7 @@
     <Compile Include="ObserverPattern\Observable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimulatedAnn.cs" />
     <Compile Include="View\Chart.cs">
       <SubType>Form</SubType>
     </Compile>

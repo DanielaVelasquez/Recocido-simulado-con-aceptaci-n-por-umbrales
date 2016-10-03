@@ -33,9 +33,9 @@ namespace SimulatedAnneling.DAO
         /// Obtiene las ciudades que existen en la base de datos
         /// </summary> 
         /// <returns>lista con las ciudades registradas en la base de datos</returns>
-        public ArrayList getCities(TourManager t)
+        public List<City> getCities(TourManager t)
         {
-            ArrayList cities = new ArrayList();
+            List<City> cities = new List<City>();
 
             MySqlDataReader reader = citySQL.execute("SELECT * FROM CITIES");
             while (reader.Read())
@@ -55,7 +55,7 @@ namespace SimulatedAnneling.DAO
         /// </summary>
         /// <param name="cities">conjunto de ciudades a las cuales se les va a encontrar las adyacnecias</param>
         /// <returns>ciudades con sus adyacencias</returns>
-        private ArrayList getAdjacencies(ArrayList cities)
+        private List<City> getAdjacencies(List<City> cities)
         {
             foreach(City c in cities)
             {

@@ -37,7 +37,7 @@ namespace SimulatedAnneling.Model.Anneling
         /// <summary>
         /// Lotes generados durante la simulación del recocido
         /// </summary>
-        private ArrayList batches;
+        private List<Batch> batches;
         /// <summary>
         /// Administrador del problema que se desea resolver
         /// </summary>
@@ -143,7 +143,7 @@ namespace SimulatedAnneling.Model.Anneling
             temperature = INITIAL_TEMPERATURE;
             random = new Random(seed);
             bestSolution = null;
-            batches = new ArrayList();
+            batches = new List<Batch>();
             manager = m;
             simulating = false;
 
@@ -159,13 +159,14 @@ namespace SimulatedAnneling.Model.Anneling
 
             //Genera una solución inicial
             ISolution initial_solution = manager.getRamdomSolution(random);
-            initial_solution.calculateCostFunction();
-            Console.WriteLine("Initial solution: " + initial_solution.ToString());
             solution = initial_solution;
 
+            
             //Calcula la temperatura inicial del problema 
              temperature = initial_temperature(initial_solution, INITIAL_TEMPERATURE, ACCEPTED_SOLUTIONS);
             
+            
+
             //Se inicia de nuevo el random
             random = new Random(seed);
             //Genera una solución inicial
@@ -228,9 +229,9 @@ namespace SimulatedAnneling.Model.Anneling
                     batches.Add(batch);
 
                     p = batch.calculate_batch(temperature, solution, random);
-                   solution = batch.getLastSolution();
-
-                    isWorking = batch.isFinished();
+                    solution = batch.getLastSolution();
+                    
+                    //isWorking = batch.isFinished();
 
                     //Revisa si la mejor solución del batch es mejor que la solucion que se tiene como mejor
                     if (batch.getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
@@ -256,6 +257,7 @@ namespace SimulatedAnneling.Model.Anneling
 
                 }
                 temperature = COOLING_FACTOR * temperature;
+                Console.WriteLine("Temperature"+temperature);
             }
         }
         /// <summary>

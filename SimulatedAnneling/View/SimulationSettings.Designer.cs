@@ -35,7 +35,11 @@
             this.numUpNumberCities = new System.Windows.Forms.NumericUpDown();
             this.btn_run = new System.Windows.Forms.Button();
             this.lb_size_cities = new System.Windows.Forms.Label();
-            this.lb_message_simulating = new System.Windows.Forms.Label();
+            this.lb_archivo = new System.Windows.Forms.Label();
+            this.txt_file = new System.Windows.Forms.TextBox();
+            this.btn_file = new System.Windows.Forms.Button();
+            this.btn_clear = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numUpSeeds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpNumberCities)).BeginInit();
             this.SuspendLayout();
@@ -67,7 +71,7 @@
             this.numUpSeeds.Size = new System.Drawing.Size(79, 22);
             this.numUpSeeds.TabIndex = 1;
             this.numUpSeeds.Value = new decimal(new int[] {
-            3,
+            88,
             0,
             0,
             0});
@@ -113,7 +117,7 @@
             // btn_run
             // 
             this.btn_run.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_run.Location = new System.Drawing.Point(404, 115);
+            this.btn_run.Location = new System.Drawing.Point(404, 230);
             this.btn_run.Name = "btn_run";
             this.btn_run.Size = new System.Drawing.Size(132, 34);
             this.btn_run.TabIndex = 5;
@@ -130,21 +134,67 @@
             this.lb_size_cities.TabIndex = 6;
             this.lb_size_cities.Text = "label2";
             // 
-            // lb_message_simulating
+            // lb_archivo
             // 
-            this.lb_message_simulating.AutoSize = true;
-            this.lb_message_simulating.Location = new System.Drawing.Point(232, 132);
-            this.lb_message_simulating.Name = "lb_message_simulating";
-            this.lb_message_simulating.Size = new System.Drawing.Size(92, 17);
-            this.lb_message_simulating.TabIndex = 7;
-            this.lb_message_simulating.Text = "AQUI ESTOY";
+            this.lb_archivo.AutoSize = true;
+            this.lb_archivo.Font = new System.Drawing.Font("Arial Narrow", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_archivo.Location = new System.Drawing.Point(27, 139);
+            this.lb_archivo.Name = "lb_archivo";
+            this.lb_archivo.Size = new System.Drawing.Size(56, 23);
+            this.lb_archivo.TabIndex = 7;
+            this.lb_archivo.Text = "City file";
+            // 
+            // txt_file
+            // 
+            this.txt_file.Enabled = false;
+            this.txt_file.Location = new System.Drawing.Point(89, 141);
+            this.txt_file.Name = "txt_file";
+            this.txt_file.Size = new System.Drawing.Size(155, 22);
+            this.txt_file.TabIndex = 8;
+            // 
+            // btn_file
+            // 
+            this.btn_file.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_file.Location = new System.Drawing.Point(250, 135);
+            this.btn_file.Name = "btn_file";
+            this.btn_file.Size = new System.Drawing.Size(107, 32);
+            this.btn_file.TabIndex = 9;
+            this.btn_file.Text = "Choose file";
+            this.btn_file.UseVisualStyleBackColor = true;
+            this.btn_file.Click += new System.EventHandler(this.btn_file_Click);
+            // 
+            // btn_clear
+            // 
+            this.btn_clear.Font = new System.Drawing.Font("Arial Narrow", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_clear.Location = new System.Drawing.Point(250, 173);
+            this.btn_clear.Name = "btn_clear";
+            this.btn_clear.Size = new System.Drawing.Size(107, 27);
+            this.btn_clear.TabIndex = 10;
+            this.btn_clear.Text = "Clear";
+            this.btn_clear.UseVisualStyleBackColor = true;
+            this.btn_clear.Click += new System.EventHandler(this.btn_clear_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(266, 230);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(132, 34);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "Back";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // SimulationSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 168);
-            this.Controls.Add(this.lb_message_simulating);
+            this.ClientSize = new System.Drawing.Size(554, 276);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_clear);
+            this.Controls.Add(this.btn_file);
+            this.Controls.Add(this.txt_file);
+            this.Controls.Add(this.lb_archivo);
             this.Controls.Add(this.numUpSeeds);
             this.Controls.Add(this.lb_size_cities);
             this.Controls.Add(this.lb_seeds);
@@ -153,7 +203,8 @@
             this.Controls.Add(this.lb_number_cities);
             this.Controls.Add(this.label1);
             this.Name = "SimulationSettings";
-            this.Text = "SimulationSettings";
+            this.ShowIcon = false;
+            this.Text = "Simulation Settings";
             this.Load += new System.EventHandler(this.SimulationSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numUpSeeds)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpNumberCities)).EndInit();
@@ -171,6 +222,10 @@
         private System.Windows.Forms.NumericUpDown numUpNumberCities;
         private System.Windows.Forms.Button btn_run;
         private System.Windows.Forms.Label lb_size_cities;
-        private System.Windows.Forms.Label lb_message_simulating;
+        private System.Windows.Forms.Label lb_archivo;
+        private System.Windows.Forms.TextBox txt_file;
+        private System.Windows.Forms.Button btn_file;
+        private System.Windows.Forms.Button btn_clear;
+        private System.Windows.Forms.Button button1;
     }
 }

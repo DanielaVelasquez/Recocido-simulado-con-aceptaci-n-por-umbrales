@@ -39,12 +39,12 @@
             // lb_title
             // 
             this.lb_title.AutoSize = true;
-            this.lb_title.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_title.Location = new System.Drawing.Point(93, 9);
+            this.lb_title.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_title.Location = new System.Drawing.Point(277, 23);
             this.lb_title.Name = "lb_title";
-            this.lb_title.Size = new System.Drawing.Size(88, 35);
+            this.lb_title.Size = new System.Drawing.Size(160, 35);
             this.lb_title.TabIndex = 1;
-            this.lb_title.Text = "Titulo";
+            this.lb_title.Text = "Cost function";
             // 
             // chart1
             // 

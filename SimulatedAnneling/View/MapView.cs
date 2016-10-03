@@ -80,10 +80,19 @@ namespace SimulatedAnneling.View
         /// Modo de operación del mapa
         /// </summary>
         private int mode;
+        private SimulationSettings settings;
         
 
         public MapView(int nMode)
         {
+            mode = nMode;
+            InitializeComponent();
+            this.CenterToScreen();
+            this.Show();
+        }
+        public MapView(int nMode,SimulationSettings s)
+        {
+            settings = s;
             mode = nMode;
             InitializeComponent();
             this.CenterToScreen();
@@ -127,7 +136,7 @@ namespace SimulatedAnneling.View
             else
                 throw new Exception("Map needs a valid mode");
         }
-        private void draw_connections(ArrayList cities)
+        private void draw_connections(List<City> cities)
         {
             routesOverlay.Routes.Clear();
 
@@ -138,14 +147,18 @@ namespace SimulatedAnneling.View
 
                 City last = (City)cities[i - 1];
                 City actual = (City)cities[i];
-                ls.Add(new PointLatLng(last.getLatitude(), last.getLongitude()));
-                ls.Add(new PointLatLng(actual.getLatitude(), actual.getLongitude()));
+
+                if(last.is_path_to(actual.getId()))
+                {
+                    ls.Add(new PointLatLng(last.getLatitude(), last.getLongitude()));
+                    ls.Add(new PointLatLng(actual.getLatitude(), actual.getLongitude()));
 
 
-                GMapRoute r = new GMapRoute(ls, "routes_solution");
-                r.Stroke.Color = Color.Black;
-                r.Stroke.Width = 2;
-                routesOverlay.Routes.Add(r);
+                    GMapRoute r = new GMapRoute(ls, "routes_solution");
+                    r.Stroke.Color = Color.Black;
+                    r.Stroke.Width = 2;
+                    routesOverlay.Routes.Add(r);
+                }
             }
 
         }
@@ -189,13 +202,13 @@ namespace SimulatedAnneling.View
             }
             Console.WriteLine("ACABE");
         }*/
-        private void configure_cities_solution(ArrayList c)
+        private void configure_cities_solution(List<City> c)
         {
             lsBoxCities.Items.Clear();
             lsBoxCities.Items.AddRange(c.ToArray());
         }
-        
-        private void drawCities(ArrayList cities)
+
+        private void drawCities(List<City> cities)
         {
             overlayOne.Markers.Clear();
             foreach(City c in cities)
@@ -381,7 +394,7 @@ namespace SimulatedAnneling.View
 
             //this.Dispose();
             //settings.CenterToScreen();
-            SimulationSettings settings = new SimulationSettings();
+            SimulationSettings settings = new SimulationSettings(this);
             settings.Show();
             this.Hide();
             
@@ -442,6 +455,12 @@ namespace SimulatedAnneling.View
                 chart.addPoint(new Model.Point(2, 0.23));*/
                 chart.Show();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            settings.Show();
+            this.Dispose();
         }
         
 

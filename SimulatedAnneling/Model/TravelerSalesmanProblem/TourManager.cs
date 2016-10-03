@@ -44,7 +44,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <summary>
         /// Conjunto de ciudades del problema
         /// </summary>
-        private ArrayList cities;
+        private List<City> cities;
         /// <summary>
         /// Cantidad de ciudades utilizar para la simulacion
         /// </summary>
@@ -52,14 +52,8 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <summary>
         /// Ciudades quiere aparezcan en la simulación
         /// </summary>
-        private ArrayList citiesSimulation;///<summary>
-        ///Distancia máxima entre las k ciudades que se van a trabajar en la simulación 
-        ///</summary>
-        public static double M = -1;
-
-        public static double INFINITE = 10 * M;
-
-        public static double K = -1;
+        private List<City> citiesSimulation;///<summary>
+        
 
         /**-------------------------------------------------------------------------------------------
          * Métodos
@@ -75,13 +69,13 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         }
         public static double  get_infinite()
         {
-            return DIAMETER * numberCitiesSimulation;
+            return 3*DIAMETER * (numberCitiesSimulation/2);
         }
         /// <summary>
         /// Entrega las ciudades involucradas en el problema
         /// </summary>
         /// <returns>ciudades del problema</returns>
-        public ArrayList getCities()
+        public List<City> getCities()
         {
             return cities;
         }
@@ -93,7 +87,6 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             //TODO VOLVER NULA LA CANTIDAD DE CIUDADES DESPUES DE CADA SIMULACION
             numberCitiesSimulation = n;
-            K = n;
         }
 
         public ISolution getRamdomSolution(Random random)
@@ -104,16 +97,18 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
             {
                 
                 //Ciudades parte de la solución
-                ArrayList c = new ArrayList();
+                List<City> c = new List<City>();
                 //Ciudades que no han sido agregadas a la lista de ciudades solución
-                ArrayList copy = (ArrayList)cities.Clone();
+                List<City> copy = cities.ToList<City>();
 
+                if (copy == cities)
+                    Console.Write("OI");
                 City city = null;
                 int index = -1;
 
                 //Si hay ciudades en la simulación se adicionan como parte de la solución
                 if (citiesSimulation != null)
-                    c = (ArrayList) citiesSimulation.Clone();
+                    c = citiesSimulation.ToList<City>();
                 else
                 {
                     //Agrega primera ciudad de forma aleatoria
@@ -164,7 +159,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
 
 
                 }
-                calculate_M(c);
+                //calculate_M(c);
                 return new Tour(c);
             }
 
@@ -173,7 +168,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// Calcula la distancia máxima entre las ciudades de la solución inicial
         /// </summary>
         /// <param name="t">conjunto de ciudades </param>
-        private void calculate_M(ArrayList t)
+       /* private void calculate_M(ArrayList t)
         {
             double sum = 0;
             ArrayList tour = (ArrayList) t.Clone();
@@ -188,8 +183,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
                     }
                 }
             }
-            M = sum;
-        }
+        }*/
         /// <summary>
         /// Encuentra el identificador de la ciudad vecina con mayor distancia 
         /// </summary>
@@ -220,7 +214,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <param name="cities">Lista de ciudades en la que se desea buscar</param>
         /// <returns>Ciudad con el identificador solicitado, regresa null en caso de 
         /// no encontrar la ciudad correspondiente</returns>
-        public City findCityBy(int id,ArrayList cities)
+        public City findCityBy(int id, List<City> cities)
         {
             foreach(City c in cities)
             {
@@ -237,7 +231,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// <param name="cities">Conjunto de ciudades en la que se desea buscar</param>
         /// <returns>Ciudad con la posicion solicitado, regresa null en caso de 
         /// no encontrar la ciudad correspondiente</returns>
-        public City findCityBy(double latitude, double longitude,ArrayList cities)
+        public City findCityBy(double latitude, double longitude, List<City> cities)
         {
             foreach (City c in cities)
             {
@@ -250,7 +244,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         /// Asigna ciudades incluidas en la simulación
         /// </summary>
         /// <param name="c">ciudades incluidas en la simulación</param>
-        public void setCitiesSimulation(ArrayList c)
+        public void setCitiesSimulation(List<City> c)
         {
             citiesSimulation = c;
         }
@@ -262,7 +256,10 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         {
             return cities.Count;
         }
-         
+        public double get_number_cities_set_simulation()
+        {
+            return numberCitiesSimulation;
+        }
 
     }
 }
