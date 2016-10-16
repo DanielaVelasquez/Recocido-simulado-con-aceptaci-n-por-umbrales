@@ -130,6 +130,8 @@ namespace SimulatedAnneling.View
                     {
 
                     }
+                    Console.WriteLine( s.getBest().ToString());
+                    Console.WriteLine("Time " + s.getTime());
                     draw_simulation(s);
                 }
                 else

@@ -95,7 +95,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         }
         public override string ToString()
         {
-            String s = "Cost function: "+calculateCostFunction()+"\nTotal distance: "+total_distance();
+            String s = "Cost function: "+calculateCostFunction()+"\nTotal distance: "+total_distance()+"\n";
             foreach(City c in cities)
             {
                 s = s + " [ " + c.ToString() + " ]";

@@ -170,7 +170,7 @@ namespace SimulatedAnneling.Model.TravelerSalesmanProblem
         }
         public override string ToString()
         {
-            return getName() + ", " + getCountry();
+            return id+", "+getName() + ", " + getCountry();
         }
     }
 }
