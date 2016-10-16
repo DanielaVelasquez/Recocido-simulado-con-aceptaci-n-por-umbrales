@@ -132,7 +132,7 @@ namespace SimulatedAnneling.Model.Anneling
 
                     //Guarda todas las soluciones generadas por el lote
                     solutions.Add(s1);
-
+                    //Console.WriteLine(s1_cost_function);
                     costs_functions.Add(s1_cost_function);
                 }
                 iterations = iterations + 1;

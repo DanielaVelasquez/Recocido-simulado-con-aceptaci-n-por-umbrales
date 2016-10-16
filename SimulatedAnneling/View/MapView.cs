@@ -121,6 +121,8 @@ namespace SimulatedAnneling.View
             else if (mode == MODE_SOLUTION)
             {
                 btn_simulate.Visible = false;
+                //controller.simulate();
+                
                 Simulation s = controller.getSimulation();
                 if (s != null)
                 {
@@ -416,9 +418,10 @@ namespace SimulatedAnneling.View
         
         public void update(String command)
         {
-            Tour tour = (Tour)controller.getSimulation().getSolution();
-            drawCities(tour.getCities());
-            //setCostFunction (""+ tour.calculateCostFunction());
+            /*Tour tour = (Tour)controller.getSimulation().getLastSolution();
+            draw_tour(tour);
+            //drawCities(tour.getCities());
+            //setCostFunction (""+ tour.calculateCostFunction());*/
         }
         private void setCostFunction(double t)
         {
@@ -442,13 +445,15 @@ namespace SimulatedAnneling.View
                 Chart chart = new Chart(TEMP_FUNC_SERIE, TEMP_FUNC_TITLE);
 
                 List<double> costs = s.get_costs_function();//s.getAcceptedSolutions();
-                int x = 1;
+                double x = 1.0;
                 Console.WriteLine("Se aceptaron: " + costs.Count+" funciones");
                 foreach(double p in costs)
                 {
                     SimulatedAnneling.Model.Point point = new Model.Point(x, p);
                     chart.addPoint(point);
                     x++;
+
+                    //Console.WriteLine("{0:N9}",p);
                 }
                 /*
                 chart.addPoint(new Model.Point(0.5, 1.358));

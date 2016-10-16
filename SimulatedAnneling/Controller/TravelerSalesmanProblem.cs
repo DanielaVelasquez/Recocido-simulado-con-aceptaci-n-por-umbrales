@@ -8,6 +8,7 @@ using System.Collections;
 using SimulatedAnneling.Model.Anneling;
 using System.Threading;
 using System.IO;
+using SimulatedAnneling.ObserverPattern;
 namespace SimulatedAnneling.Controller
 {
     public class TravelerSalesmanProblem
@@ -37,18 +38,18 @@ namespace SimulatedAnneling.Controller
         /// Factor de enfriamiento del sistema, determina que tan rápido o lento
         /// la temperatura disminuyendo
         /// </summary>
-        private const double COOLING_FACTOR = 0.9885;
+        private const double COOLING_FACTOR = 0.95;
 
         /// <summary>
         /// Tamaño de los lotes que se van a generar
         /// </summary>
-        private const double BATCH_SIZE = 100;
+        private const double BATCH_SIZE = 200;
 
         /// <summary>
         /// Máxima cantidad de iteraciones permitidas cuando se trata
         /// de generar un lote
         /// </summary>
-        private const double MAX_ITERATION_BATCH = BATCH_SIZE * 3;
+        private const double MAX_ITERATION_BATCH = BATCH_SIZE * BATCH_SIZE;
 
         /// <summary>
         /// Cero virtual para el equilibrio témico
@@ -87,7 +88,7 @@ namespace SimulatedAnneling.Controller
         /// Cantidad iteraciones para determinar porcentaje de aceptados a partir
         /// de una temperatura y solución inicial
         /// </summary>
-        private const double N_PERCENTAGE_ACCEPTED = 20;
+        private const double N_PERCENTAGE_ACCEPTED = 90;
         /// <summary>
         /// Porcentaje de soluciones aceptadas que se desea tener para calcular
         /// la solución inicial
@@ -160,8 +161,10 @@ namespace SimulatedAnneling.Controller
 
         public void simulate()
         {
+            simulation.simulate();
+            /*
             Thread thread = new Thread(simulating);
-            thread.Start();
+            thread.Start();*/
         }
         public void set_simulation(int seed, int cities)
         {
@@ -273,7 +276,10 @@ namespace SimulatedAnneling.Controller
         {
             return simulation;
         }
-
+        public void addObserver(IObserver o)
+        {
+            simulation.addObserver(o);
+        }
         
     }
 }

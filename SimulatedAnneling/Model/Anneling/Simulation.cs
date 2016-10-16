@@ -115,6 +115,8 @@ namespace SimulatedAnneling.Model.Anneling
         /// </summary>
         private TimeSpan time;
 
+        private const int LOST_BATCH = 5;
+
 
         /**-------------------------------------------------------------------------------------------
         * Métodos
@@ -218,8 +220,10 @@ namespace SimulatedAnneling.Model.Anneling
 
             //Determina si aún se están generando soluciones en un lote
             Boolean isWorking = true;
+            
             while(temperature>E_SIMULATED_ANNELING && isWorking)
             {
+                int batch_lost = 0;
                 double p1 = 0;
                 while(Math.Abs(p-p1)>EP_SIMULATED_ANNELING && isWorking)
                 {
@@ -230,34 +234,27 @@ namespace SimulatedAnneling.Model.Anneling
 
                     p = batch.calculate_batch(temperature, solution, random);
                     solution = batch.getLastSolution();
+                    this.notify(null);
                     
-                    //isWorking = batch.isFinished();
+                    isWorking = batch.isFinished();
+
+                    if (!isWorking)
+                    {
+                        batch_lost++;
+                        Console.WriteLine("Lote abortado");
+                        if (batch_lost < LOST_BATCH)
+                            isWorking = true;
+                    }
 
                     //Revisa si la mejor solución del batch es mejor que la solucion que se tiene como mejor
                     if (batch.getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
                         bestSolution = batch.getBest();
-                    /*
-                    double temp = calculateBatch(solution);
-                    //Si el último lote terminó
-                    if (didLastBatchEnd())
-                    {
-                        p1 = p;
-                        p = temp;
-                        setSolution(getLastBatch().getLastSolution());
-
-                        //Ver si la mejor solucion del lote es la mejor solucion que se ha generado
-                        if (getLastBatch().getBest().calculateCostFunction() < bestSolution.calculateCostFunction())
-                            bestSolution = solution;
-                    }
-                    else
-                        //Ya no se están produciendo nuevas soluciones, se para el 
-                        //algoritmo
-                        isWorking = false;
-                    */
+                    
 
                 }
+                
                 temperature = COOLING_FACTOR * temperature;
-                Console.WriteLine("Temperature"+temperature);
+                //Console.WriteLine(temperature);
             }
         }
         /// <summary>

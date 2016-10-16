@@ -94,7 +94,7 @@ namespace SimulatedAnneling.View
         {
             try
             {
-
+                
                 int seed = (int)numUpSeeds.Value;
                 int cities = (int)numUpNumberCities.Value;
 
@@ -102,7 +102,7 @@ namespace SimulatedAnneling.View
                     controller.set_simulation(seed, cities);
                 else
                     controller.set_simulation(seed, cities, txt_file.Text);
-
+                
                 controller.simulate();
                 Thread.Sleep(5000);
                 btn_run.Enabled = false;
@@ -118,6 +118,7 @@ namespace SimulatedAnneling.View
                 btn_run.Enabled = true;
                 MapView map = new MapView(MapView.MODE_SOLUTION,this);
                 map.Show();
+           
             }
             catch(Exception ex)
             {

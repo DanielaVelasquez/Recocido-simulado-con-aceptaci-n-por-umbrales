@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimulatedAnneling.Controller;
+using System.IO;
 namespace SimulatedAnneling
 {
     static class Program
@@ -14,6 +15,31 @@ namespace SimulatedAnneling
         [STAThread]
         static void Main(String[] args)
         {
+            
+            TravelerSalesmanProblem controller = TravelerSalesmanProblem.getInstance();
+            FileStream stream = new FileStream("C:\\Users\\danyv\\Desktop\\archivo.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(stream);
+            int best_seed = -1;
+            double best_cf = double.MaxValue;
+            for(int i = 400; i<600;i++)
+            {
+                controller.set_simulation(i,78,"C:\\Users\\danyv\\Desktop\\input");
+                controller.simulate();
+                double cf = controller.getSimulation().getBest().calculateCostFunction();
+                writer.WriteLine(cf+" "+i);
+                if(cf<best_cf)
+                {
+                    best_seed = i;
+                    best_cf = cf;
+                }
+
+            }
+            writer.WriteLine("Mejor: "+best_cf+" "+best_seed);
+            writer.Close();
+            
+            
+            
+            /*
             if(args.Length>0)
             {
 
@@ -90,7 +116,7 @@ namespace SimulatedAnneling
                 SimulatedAnneling.View.MapView a = new SimulatedAnneling.View.MapView(SimulatedAnneling.View.MapView.MODE_WORLD);
                 Application.Run(a);
                 //
-            }
+            }*/
         }
     }
 }
